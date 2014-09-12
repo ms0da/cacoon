@@ -1,11 +1,11 @@
 
 #include "../ext/catch/catch.hpp"
 
-#include "../cacoon/comms.h"
+#include "../cacoon/comms_file.h"
 #include <fstream>
 #include <sstream>
 
-using cacoon::comms;
+using cacoon::comms_file;
 using std::string;
 using std::ifstream;
 using std::ofstream;
@@ -33,13 +33,13 @@ void write_line(const string location, const string content, bool truncate = tru
     os.flush();
 }
 
-SCENARIO("comms needs a destination", "[comms]") {
-    comms c(dst_read);
+SCENARIO("comms needs a destination", "[comms_file]") {
+    comms_file c(dst_read);
     REQUIRE(c.get_location() == dst_read);
 }
 
-SCENARIO("can write to a communication channel", "[comms]") {
-    comms c(dst_read);
+SCENARIO("can write to a communication channel", "[comms_file]") {
+    comms_file c(dst_read);
 
     WHEN("content is written") {
         c.write(dst_write, content_line);
@@ -53,9 +53,9 @@ SCENARIO("can write to a communication channel", "[comms]") {
     }
 }
 
-SCENARIO("can read from a communication channel", "[comms]") {
+SCENARIO("can read from a communication channel", "[comms_file]") {
     write_line(dst_read, "");
-    comms c(dst_read);
+    comms_file c(dst_read);
     REQUIRE(c.empty());
 
     WHEN("the channel is empty") {

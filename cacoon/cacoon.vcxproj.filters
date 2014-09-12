@@ -18,12 +18,18 @@
     <ClCompile Include="agent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="comms_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="comms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="comms_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="comms.h">

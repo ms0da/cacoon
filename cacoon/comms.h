@@ -1,35 +1,36 @@
 
-#ifndef CACOON_COMMS_H
-#define CACOON_COMMS_H
+#ifndef CACOON_comms_H
+#define CACOON_comms_H
 
 #include <string>
 #include <list>
-#include <fstream>
 
 namespace cacoon {
+
     struct comms {
         using comms_id = std::string;
 
-        comms(const comms_id id);
+        comms(const comms_id& location);
         comms(const comms& c) = delete;
-        comms operator=(const comms& c) = delete;
-        
+        virtual ~comms();
+
+        void write(const comms_id& dst, const std::string& str);
+        void update();
+        const std::string read();
+        bool empty() const throw();
         const std::string& get_location() const throw();
 
-        void write(const std::string& dst, const std::string& str);
-        void update();
-        std::string read();
-        bool empty() const throw();
-    private:
-
+    protected:
         using content_type = std::list<std::string>;
 
-        content_type update_stream();
+    private:
+        virtual content_type update_stream() = 0;
+        virtual void write_stream(const comms_id& dst, const std::string& str) = 0;
 
-        std::string m_location;
+        comms_id m_location;
         content_type m_content;
-        std::ifstream m_read;
     };
+
 }
 
 #endif
