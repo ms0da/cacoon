@@ -13,8 +13,7 @@ using std::copy;
 using std::list;
 
 comms_file::comms_file(const comms_id& location)
-:comms(location), m_read(location) {
-    update();
+:comms_impl(location), m_read(location) {
 }
 
 comms_file::~comms_file() {

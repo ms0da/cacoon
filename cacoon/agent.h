@@ -2,6 +2,8 @@
 #ifndef CACOON_AGENT_H
 #define CACOON_AGENT_H
 
+#include "comms.h"
+
 namespace cacoon {
     struct agent {
         using id_type = unsigned int;
@@ -14,6 +16,7 @@ namespace cacoon {
         static const id_type DEFAULT_ID;
     private:
         id_type m_id;
+        //comms m_comms;
     };
 }
 

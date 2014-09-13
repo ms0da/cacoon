@@ -10,7 +10,10 @@
 
 namespace cacoon {
 
-    struct comms_file : public comms {
+    struct comms_file : public comms_impl {
+        using comms_id = comms::comms_id;
+        using content_type = comms::content_type;
+
         comms_file(const comms_id& location);
         comms_file(const comms_file& c) = delete;
         virtual ~comms_file();

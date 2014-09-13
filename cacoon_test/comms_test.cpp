@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+using cacoon::comms;
 using cacoon::comms_file;
 using std::string;
 using std::ifstream;
@@ -13,7 +14,7 @@ using std::endl;
 using std::string;
 using std::stringstream;
 using std::getline;
-
+using std::move;
 
 static const string base_dir = "C:/code/cacoon/Debug/";
 static const string dst_read = base_dir + "comms_test_read";
@@ -24,8 +25,7 @@ void write_line(const string location, const string content, bool truncate = tru
     std::ios_base::openmode mode = std::ios_base::out;
     if (truncate) {
         mode |= std::ios_base::trunc;
-    }
-    else {
+    } else {
         mode |= std::ios_base::app;
     }
     ofstream os(location, mode);
@@ -34,12 +34,14 @@ void write_line(const string location, const string content, bool truncate = tru
 }
 
 SCENARIO("comms needs a destination", "[comms_file]") {
-    comms_file c(dst_read);
+    comms_file cf(dst_read);
+    comms c(move(cf));
     REQUIRE(c.get_location() == dst_read);
 }
 
 SCENARIO("can write to a communication channel", "[comms_file]") {
-    comms_file c(dst_read);
+    comms_file cf(dst_read);
+    comms c(move(cf));
 
     WHEN("content is written") {
         c.write(dst_write, content_line);
@@ -55,7 +57,8 @@ SCENARIO("can write to a communication channel", "[comms_file]") {
 
 SCENARIO("can read from a communication channel", "[comms_file]") {
     write_line(dst_read, "");
-    comms_file c(dst_read);
+    comms_file cf(dst_read);
+    comms c(move(cf));
     REQUIRE(c.empty());
 
     WHEN("the channel is empty") {
