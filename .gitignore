@@ -22,3 +22,7 @@
 
 *.sdf
 *.opensdf
+
+# Debug
+Debug/
+*/Debug/*

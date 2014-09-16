@@ -1,14 +1,16 @@
 
 #include "agent.h"
-using cacoon::agent;
-
 #include <limits>
+
+using cacoon::agent;
+using cacoon::comms_impl;
 using std::numeric_limits;
+using std::move;
 
 const agent::id_type agent::DEFAULT_ID = numeric_limits<agent::id_type>::min();
 
-agent::agent()
-:m_id(DEFAULT_ID) {
+agent::agent(comms_impl&& c)
+:m_id(DEFAULT_ID), m_comms(move(c)) {
 }
 
 void agent::set_id(id_type id) {
