@@ -3,17 +3,31 @@
 #define CACOON_AGENT_H
 
 #include "comms.h"
+#include <limits>
 
 namespace cacoon {
+    
+    namespace agent_id {
+        using value_type = unsigned int;
+        static const value_type DEFAULT_ID = std::numeric_limits<value_type>::min();
+    }
+
+    template<typename T>
     struct agent {
-        using id_type = unsigned int;
+        using value_type = T;
+        using id_type = agent_id::value_type;
 
-        agent(comms_impl&& c);
+        agent(const comms_impl::comms_id& location)
+            :m_comms(T(location)), m_id(agent_id::DEFAULT_ID) {
+        }
 
-        void set_id(id_type id);
-        id_type get_id() const;
+        void set_id(id_type id) {
+            m_id = id;
+        }
 
-        static const id_type DEFAULT_ID;
+        id_type get_id() const {
+            return m_id;
+        }
 
     private:
         id_type m_id;
