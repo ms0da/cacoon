@@ -19,16 +19,16 @@ comms::comms(comms_impl&& impl) {
 comms::~comms() {
 }
 
-void comms::write(const comms_id& dst, const string& str) {
-    m_impl->write_stream(dst, str);
+void comms::send(const comms_id& dst, const string& str) {
+    m_impl->send_stream(dst, str);
 }
 
-void comms::update() {
-    auto new_content = m_impl->update_stream();
+void comms::receive() {
+    auto new_content = m_impl->receive_stream();
     m_content.insert(end(m_content), begin(new_content), end(new_content));
 }
 
-const string comms::read() {
+const string comms::get_string() {
     string line(m_content.front());
     m_content.pop_front();
     return move(line);
@@ -43,10 +43,10 @@ const comms::comms_id& comms::get_location() const throw() {
 }
 
 // IMPL specific
-comms_impl::comms_impl(const comms_id& location)
-:m_location(location) {
+comms_impl::comms_impl(const comms_id& id)
+:m_id(id) {
 }
 
 const comms_impl::comms_id& comms_impl::get_location() const throw() {
-    return m_location;
+    return m_id;
 }

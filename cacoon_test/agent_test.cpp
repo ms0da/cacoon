@@ -4,12 +4,13 @@
 #include "../cacoon/agent.h"
 
 using cacoon::agent;
+using cacoon::agent_id::value_type;
 using cacoon::comms_file;
 using std::move;
 
 SCENARIO("give and retrieve the id of an agent", "[agent]") {  
     using agent_type = agent<comms_file>;
-    agent_type agent("store");
+    agent_type agent;
     REQUIRE(cacoon::agent_id::DEFAULT_ID == agent.get_id());
 
     GIVEN("a value is given to the id") {

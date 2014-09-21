@@ -14,13 +14,13 @@ namespace cacoon {
         using comms_id = comms::comms_id;
         using content_type = comms::content_type;
 
-        comms_file(const comms_id& location);
+        comms_file(const comms_id& id);
         comms_file(const comms_file& c) = delete;
         virtual ~comms_file();
 
     private:
-        virtual content_type update_stream();
-        virtual void write_stream(const comms_id& dst, const std::string& str);
+        virtual content_type receive_stream();
+        virtual void send_stream(const comms_id& dst, const std::string& str);
 
         std::ifstream m_read;
     };

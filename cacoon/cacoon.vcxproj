@@ -64,7 +64,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="agent.cpp" />
     <ClCompile Include="comms_file.cpp" />
     <ClCompile Include="comms.cpp" />
   </ItemGroup>

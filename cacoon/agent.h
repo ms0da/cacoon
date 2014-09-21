@@ -4,6 +4,7 @@
 
 #include "comms.h"
 #include <limits>
+#include <string>
 
 namespace cacoon {
     
@@ -17,8 +18,8 @@ namespace cacoon {
         using value_type = T;
         using id_type = agent_id::value_type;
 
-        agent(const comms_impl::comms_id& location)
-            :m_comms(T(location)), m_id(agent_id::DEFAULT_ID) {
+        agent(id_type id = agent_id::DEFAULT_ID)
+        :m_comms(T(id)), m_id(id) {
         }
 
         void set_id(id_type id) {
