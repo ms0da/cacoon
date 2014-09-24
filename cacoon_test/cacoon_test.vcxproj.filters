@@ -21,6 +21,12 @@
     <ClCompile Include="comms_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="datastore_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_utils.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cacoon_test.h">

@@ -1,5 +1,6 @@
 
 #include "../ext/catch/catch.hpp"
+#include "test_utils.h"
 
 #include "../cacoon/comms_file.h"
 #include <fstream>
@@ -28,18 +29,6 @@ string get_filename(const comms_id id) {
     return ss.str();
 }
 
-void write_line(const string location, const string content, bool truncate = true) {
-    std::ios_base::openmode mode = std::ios_base::out;
-    if (truncate) {
-        mode |= std::ios_base::trunc;
-    } else {
-        mode |= std::ios_base::app;
-    }
-    ofstream os(location, mode);
-    os << content;
-    os.flush();
-}
-
 SCENARIO("comms needs a destination", "[comms_file]") {
     comms_file cf(dst_read);
     comms c(move(cf));
@@ -63,7 +52,8 @@ SCENARIO("can write to a communication channel", "[comms_file]") {
 }
 
 SCENARIO("can read from a communication channel", "[comms_file]") {
-    write_line(get_filename(dst_read), "");
+    const string filename_read = get_filename(dst_read);
+    test_utils::empty_file(filename_read);
     comms_file cf(dst_read);
     comms c(move(cf));
     REQUIRE(c.empty());
@@ -75,7 +65,7 @@ SCENARIO("can read from a communication channel", "[comms_file]") {
         }
     }
     WHEN("the channel has a single line to read") {
-        write_line(get_filename(dst_read), content_line);
+        test_utils::write_to_file(filename_read, content_line);
 
         THEN("content is not expected to be empty") {
             c.receive();
@@ -87,7 +77,7 @@ SCENARIO("can read from a communication channel", "[comms_file]") {
     
     WHEN("the channel has multiple line to read") {
         const int line_count = 5;
-        ofstream os(get_filename(dst_read));
+        ofstream os(filename_read);
         for (int i = 0; i < line_count; ++i) {
             os << i << content_line << std::endl;
         }
