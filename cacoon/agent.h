@@ -3,10 +3,13 @@
 #define CACOON_AGENT_H
 
 #include "comms.h"
+#include "datastore.h"
 #include <limits>
 #include <string>
 
 namespace cacoon {
+
+    static const std::string STORE_LOCATION = "datastore.bin";
     
     namespace agent_id {
         using value_type = unsigned int;
@@ -19,7 +22,7 @@ namespace cacoon {
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
-        :m_comms(T(id)), m_id(id) {
+        :m_comms(T(id)), m_id(id), m_store(STORE_LOCATION) {
         }
 
         void set_id(id_type id) {
@@ -31,8 +34,11 @@ namespace cacoon {
         }
 
     private:
+        
+
         id_type m_id;
         comms m_comms;
+        datastore m_store;
     };
 }
 
