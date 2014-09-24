@@ -36,6 +36,9 @@
     <ClCompile Include="datastore.cpp">
       <Filter>Source Files\datastore</Filter>
     </ClCompile>
+    <ClCompile Include="datastore.cpp">
+      <Filter>Source Files\datastore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="transport_file.h">
       <Filter>Header Files\transport</Filter>
+    </ClInclude>
+    <ClInclude Include="datastore.h">
+      <Filter>Header Files\datastore</Filter>
     </ClInclude>
     <ClInclude Include="datastore.h">
       <Filter>Header Files\datastore</Filter>
