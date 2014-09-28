@@ -29,6 +29,14 @@ namespace cacoon {
             m_run.clear();
         }
 
+        ~agent() {
+            try_stop();
+            if(is_running()) {
+                std::unique_lock<std::mutex> stop_lock(m_stop_mutex);
+                m_stop_cond.wait(stop_lock);
+            }
+        }
+
         void set_id(id_type id) {
             m_id = id;
         }
@@ -38,10 +46,10 @@ namespace cacoon {
         }
 
         void start() {
-            //m_thread = std::move(std::thread(&main_loop, this));
             if(!m_run.test_and_set()) {
-
+                m_main_thread = std::move(std::thread(&agent::main_loop, this));
             }
+            m_stop_cond.notify_all();
         }
 
         bool is_running() {
@@ -54,9 +62,9 @@ namespace cacoon {
 
         void try_stop() {
             m_run.clear();
-            //if(m_thread.joinable()) {
-            //    m_thread.join();
-            //}
+            if(m_main_thread.joinable()) {
+                m_main_thread.join();
+            }
         }
 
     private:
@@ -76,7 +84,10 @@ namespace cacoon {
         datastore m_store;
 
         std::atomic_flag m_run;
-        //std::thread m_thread;
+        std::thread m_main_thread;
+
+        std::mutex m_stop_mutex;
+        std::condition_variable m_stop_cond;
         //auto m_future;
     };
 }
