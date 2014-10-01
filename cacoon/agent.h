@@ -19,9 +19,8 @@ namespace cacoon {
         static const value_type DEFAULT_ID = std::numeric_limits<value_type>::min();
     }
 
-    template<typename T>
+    template<typename transport_type>
     struct agent {
-        using transport_type = T;
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
@@ -32,8 +31,8 @@ namespace cacoon {
         ~agent() {
             try_stop();
             if(is_running()) {
-                std::unique_lock<std::mutex> stop_lock(m_stop_mutex);
-                m_stop_cond.wait(stop_lock);
+                std::unique_lock<std::mutex> lock_stop(m_mutex_stop);
+                m_cond_stop.wait(lock_stop);
             }
         }
 
@@ -49,7 +48,7 @@ namespace cacoon {
             if(!m_run.test_and_set()) {
                 m_main_thread = std::move(std::thread(&agent::main_loop, this));
             }
-            m_stop_cond.notify_all();
+            m_cond_stop.notify_all();
         }
 
         bool is_running() {
@@ -70,13 +69,12 @@ namespace cacoon {
     private:
 
         void main_loop() {
-            
-        }
-
-        void loop_step() {
-            std::cout << "Running0" << std::endl;
-            Sleep(5000);
-            std::cout << "Running1" << std::endl;
+            while(m_run.test_and_set()) {
+                // get message from comms
+                // execute on a thread (package_task)
+                // send result from action
+            }
+            m_run.clear();
         }
 
         id_type m_id;
@@ -86,8 +84,8 @@ namespace cacoon {
         std::atomic_flag m_run;
         std::thread m_main_thread;
 
-        std::mutex m_stop_mutex;
-        std::condition_variable m_stop_cond;
+        std::mutex m_mutex_stop;
+        std::condition_variable m_cond_stop;
         //auto m_future;
     };
 }
