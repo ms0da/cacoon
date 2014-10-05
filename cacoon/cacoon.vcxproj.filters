@@ -25,10 +25,19 @@
     <Filter Include="Source Files\datastore">
       <UniqueIdentifier>{0b0fd611-32c4-45ea-8d3d-de88efb81505}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\transport">
+      <UniqueIdentifier>{5c6c4f3b-dba3-4126-8db1-6eb2b28258ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\transport">
+      <UniqueIdentifier>{358bb0c2-1fdd-4294-8d87-5ef2e40c260c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="datastore.cpp">
+      <Filter>Source Files\datastore</Filter>
+    </ClCompile>
     <ClCompile Include="transport.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\transport</Filter>
     </ClCompile>
     <ClCompile Include="transport_file.cpp">
       <Filter>Source Files\transport</Filter>
@@ -43,6 +52,9 @@
   <ItemGroup>
     <ClInclude Include="agent.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="datastore.h">
+      <Filter>Header Files\datastore</Filter>
     </ClInclude>
     <ClInclude Include="transport.h">
       <Filter>Header Files\transport</Filter>

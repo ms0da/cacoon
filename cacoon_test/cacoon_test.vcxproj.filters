@@ -21,11 +21,11 @@
     <ClCompile Include="transport_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="datastore_test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test_utils.h">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="datastore_test.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
