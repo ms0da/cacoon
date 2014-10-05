@@ -1,13 +1,13 @@
 
 #include "../ext/catch/catch.hpp"
 
-#include "../cacoon/comms_file.h"
+#include "../cacoon/transport_file.h"
 #include <fstream>
 #include <sstream>
 
-using cacoon::comms;
-using cacoon::comms_file;
-using cacoon::comms_types::comms_id;
+using cacoon::transport;
+using cacoon::transport_file;
+using cacoon::transport_types::transport_id;
 using std::string;
 using std::ifstream;
 using std::ofstream;
@@ -19,10 +19,10 @@ using std::move;
 
 static const string content_line = "hello world !42";
 
-static const comms_id dst_read = 42;
-static const comms_id dst_write = 24;
+static const transport_id dst_read = 42;
+static const transport_id dst_write = 24;
 
-string get_filename(const comms_id id) {
+string get_filename(const transport_id id) {
     stringstream ss;
     ss << id;
     return ss.str();
@@ -40,18 +40,18 @@ void write_line(const string location, const string content, bool truncate = tru
     os.flush();
 }
 
-SCENARIO("comms needs a destination", "[comms_file]") {
-    comms_file cf(dst_read);
-    comms c(move(cf));
-    REQUIRE(c.get_location() == dst_read);
+SCENARIO("transport needs a destination", "[transport_file]") {
+    transport_file tf(dst_read);
+    transport t(move(tf));
+    REQUIRE(t.get_location() == dst_read);
 }
 
-SCENARIO("can write to a communication channel", "[comms_file]") {
-    comms_file cf(dst_read);
-    comms c(move(cf));
+SCENARIO("can write to a communication channel", "[transport_file]") {
+    transport_file tf(dst_read);
+    transport t(move(tf));
 
     WHEN("content is written") {
-        c.send(dst_write, content_line);
+        t.send(dst_write, content_line);
 
         THEN("content is expected to disk") {
             ifstream in(get_filename(dst_write));
@@ -62,25 +62,25 @@ SCENARIO("can write to a communication channel", "[comms_file]") {
     }
 }
 
-SCENARIO("can read from a communication channel", "[comms_file]") {
+SCENARIO("can read from a communication channel", "[transport_file]") {
     write_line(get_filename(dst_read), "");
-    comms_file cf(dst_read);
-    comms c(move(cf));
-    REQUIRE(c.empty());
+    transport_file tf(dst_read);
+    transport t(move(tf));
+    REQUIRE(t.empty());
 
     WHEN("the channel is empty") {
         THEN("content is expected to be empty") {
-            c.receive();
-            REQUIRE(c.empty());
+            t.receive();
+            REQUIRE(t.empty());
         }
     }
     WHEN("the channel has a single line to read") {
         write_line(get_filename(dst_read), content_line);
 
         THEN("content is not expected to be empty") {
-            c.receive();
-            REQUIRE(!c.empty());
-            string content = c.get_string();
+            t.receive();
+            REQUIRE(!t.empty());
+            string content = t.get_string();
             REQUIRE(content == content_line);
         }
     }
@@ -93,16 +93,16 @@ SCENARIO("can read from a communication channel", "[comms_file]") {
         }
 
         THEN("content is not expected to be empty") {
-            REQUIRE(c.empty());
-            c.receive();
-            REQUIRE(!c.empty());
+            REQUIRE(t.empty());
+            t.receive();
+            REQUIRE(!t.empty());
             for (int i = 0; i < line_count; ++i) {
                 stringstream ss;
                 ss << i << content_line;
                 string expected_content;
                 getline(ss, expected_content);
-                REQUIRE(!c.empty());
-                string content = c.get_string();
+                REQUIRE(!t.empty());
+                string content = t.get_string();
                 REQUIRE(content == expected_content);
             }
         }

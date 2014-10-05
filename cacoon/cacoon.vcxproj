@@ -64,13 +64,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="comms_file.cpp" />
-    <ClCompile Include="comms.cpp" />
+    <ClCompile Include="transport_file.cpp" />
+    <ClCompile Include="transport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h" />
-    <ClInclude Include="comms_file.h" />
-    <ClInclude Include="comms.h" />
+    <ClInclude Include="transport_file.h" />
+    <ClInclude Include="transport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

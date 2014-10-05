@@ -2,7 +2,7 @@
 #ifndef CACOON_AGENT_H
 #define CACOON_AGENT_H
 
-#include "comms.h"
+#include "transport.h"
 #include <limits>
 #include <string>
 
@@ -19,7 +19,7 @@ namespace cacoon {
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
-        :m_comms(T(id)), m_id(id) {
+        :m_transport(T(id)), m_id(id) {
         }
 
         void set_id(id_type id) {
@@ -32,7 +32,7 @@ namespace cacoon {
 
     private:
         id_type m_id;
-        comms m_comms;
+        transport m_transport;
     };
 }
 

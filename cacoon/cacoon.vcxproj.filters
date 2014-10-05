@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="comms_file.cpp">
+    <ClCompile Include="transport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="comms.cpp">
+    <ClCompile Include="transport_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +26,10 @@
     <ClInclude Include="agent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="comms_file.h">
+    <ClInclude Include="transport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="comms.h">
+    <ClInclude Include="transport_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
