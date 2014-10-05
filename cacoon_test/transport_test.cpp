@@ -6,9 +6,9 @@
 #include <fstream>
 #include <sstream>
 
-using cacoon::transport;
-using cacoon::transport_file;
-using cacoon::transport_types::transport_id;
+using cacoon::transport::id_type;
+using cacoon::transport::base;
+using cacoon::transport::file;
 using std::string;
 using std::ifstream;
 using std::ofstream;
@@ -20,24 +20,24 @@ using std::move;
 
 static const string content_line = "hello world !42";
 
-static const transport_id dst_read = 42;
-static const transport_id dst_write = 24;
+static const id_type dst_read = 42;
+static const id_type dst_write = 24;
 
-string get_filename(const transport_id id) {
+string get_filename(const id_type& id) {
     stringstream ss;
     ss << id;
     return ss.str();
 }
 
 SCENARIO("transport needs a destination", "[transport_file]") {
-    transport_file tf(dst_read);
-    transport t(move(tf));
+    file tf(dst_read);
+    base t(move(tf));
     REQUIRE(t.get_location() == dst_read);
 }
 
 SCENARIO("can write to a communication channel", "[transport_file]") {
-    transport_file tf(dst_read);
-    transport t(move(tf));
+    file tf(dst_read);
+    base t(move(tf));
 
     WHEN("content is written") {
         t.send(dst_write, content_line);
@@ -54,8 +54,8 @@ SCENARIO("can write to a communication channel", "[transport_file]") {
 SCENARIO("can read from a communication channel", "[transport_file]") {
     const string filename_read = get_filename(dst_read);
     test_utils::empty_file(filename_read);
-    transport_file tf(dst_read);
-    transport t(move(tf));
+    file tf(dst_read);
+    base t(move(tf));
     REQUIRE(t.empty());
 
     WHEN("the channel is empty") {

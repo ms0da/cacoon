@@ -69,7 +69,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="agent_test.cpp" />
-    <ClCompile Include="comms_test.cpp" />
+    <ClCompile Include="transport_test.cpp" />
     <ClCompile Include="datastore_test.cpp" />
     <ClCompile Include="test_utils.h" />
   </ItemGroup>

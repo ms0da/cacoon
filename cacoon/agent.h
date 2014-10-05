@@ -76,9 +76,8 @@ namespace cacoon {
             }
             m_run.clear();
         }
-
         id_type m_id;
-        transport m_transport;
+        transport::base m_transport;
         datastore m_store;
 
         std::atomic_flag m_run;
