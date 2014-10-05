@@ -69,7 +69,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="agent_test.cpp" />
-    <ClCompile Include="comms_test.cpp" />
+    <ClCompile Include="transport_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cacoon_test.h" />

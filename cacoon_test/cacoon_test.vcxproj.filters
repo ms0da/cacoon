@@ -18,7 +18,7 @@
     <ClCompile Include="agent_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="comms_test.cpp">
+    <ClCompile Include="transport_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

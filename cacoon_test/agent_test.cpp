@@ -5,11 +5,11 @@
 
 using cacoon::agent;
 using cacoon::agent_id::value_type;
-using cacoon::transport_file;
+using cacoon::transport::file;
 using std::move;
 
 SCENARIO("give and retrieve the id of an agent", "[agent]") {  
-    using agent_type = agent<transport_file>;
+    using agent_type = agent<file>;
     agent_type agent;
     REQUIRE(cacoon::agent_id::DEFAULT_ID == agent.get_id());
 

@@ -32,7 +32,7 @@ namespace cacoon {
 
     private:
         id_type m_id;
-        transport m_transport;
+        transport::base m_transport;
     };
 }
 
