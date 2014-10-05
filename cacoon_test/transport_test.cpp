@@ -32,7 +32,7 @@ string get_filename(const id_type& id) {
 SCENARIO("transport needs a destination", "[transport_file]") {
     file tf(dst_read);
     base t(move(tf));
-    REQUIRE(t.get_location() == dst_read);
+    REQUIRE(t.get_id() == dst_read);
 }
 
 SCENARIO("can write to a communication channel", "[transport_file]") {

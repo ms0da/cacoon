@@ -19,7 +19,7 @@ namespace cacoon {
 
             virtual content_type receive_stream() = 0;
             virtual void send_stream(const id_type& dst, const std::string& str) = 0;
-            const id_type& get_location() const throw();
+            const id_type& get_id() const throw();
 
         private:
             id_type m_id;
@@ -34,7 +34,7 @@ namespace cacoon {
             void receive();
             const std::string get_string();
             bool empty() const throw();
-            const id_type& get_location() const throw();        
+            const id_type& get_id() const throw();        
         private:
             content_type m_content;
             impl* m_impl;

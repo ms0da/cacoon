@@ -38,8 +38,8 @@ bool base::empty() const throw() {
     return m_content.empty();
 }
 
-const id_type& base::get_location() const throw() {
-    return m_impl->get_location();
+const id_type& base::get_id() const throw() {
+    return m_impl->get_id();
 }
 
 // IMPL specific
@@ -47,6 +47,6 @@ impl::impl(const id_type& id)
 :m_id(id) {
 }
 
-const id_type& impl::get_location() const throw() {
+const id_type& impl::get_id() const throw() {
     return m_id;
 }
