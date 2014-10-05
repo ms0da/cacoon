@@ -13,10 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\comms">
+    <Filter Include="Header Files\transport">
       <UniqueIdentifier>{5c6c4f3b-dba3-4126-8db1-6eb2b28258ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\comms">
+    <Filter Include="Source Files\transport">
       <UniqueIdentifier>{358bb0c2-1fdd-4294-8d87-5ef2e40c260c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\datastore">
@@ -27,11 +27,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="comms.cpp">
-      <Filter>Source Files\comms</Filter>
+    <ClCompile Include="transport.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="comms_file.cpp">
-      <Filter>Source Files\comms</Filter>
+    <ClCompile Include="transport_file.cpp">
+      <Filter>Source Files\transport</Filter>
     </ClCompile>
     <ClCompile Include="datastore.cpp">
       <Filter>Source Files\datastore</Filter>
@@ -41,11 +41,11 @@
     <ClInclude Include="agent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="comms.h">
-      <Filter>Header Files\comms</Filter>
+    <ClInclude Include="transport.h">
+      <Filter>Header Files\transport</Filter>
     </ClInclude>
-    <ClInclude Include="comms_file.h">
-      <Filter>Header Files\comms</Filter>
+    <ClInclude Include="transport_file.h">
+      <Filter>Header Files\transport</Filter>
     </ClInclude>
     <ClInclude Include="datastore.h">
       <Filter>Header Files\datastore</Filter>

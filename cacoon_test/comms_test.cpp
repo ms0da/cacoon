@@ -2,13 +2,13 @@
 #include "../ext/catch/catch.hpp"
 #include "test_utils.h"
 
-#include "../cacoon/comms_file.h"
+#include "../cacoon/transport_file.h"
 #include <fstream>
 #include <sstream>
 
-using cacoon::comms;
-using cacoon::comms_file;
-using cacoon::comms_types::comms_id;
+using cacoon::transport;
+using cacoon::transport_file;
+using cacoon::transport_types::transport_id;
 using std::string;
 using std::ifstream;
 using std::ofstream;
@@ -20,27 +20,27 @@ using std::move;
 
 static const string content_line = "hello world !42";
 
-static const comms_id dst_read = 42;
-static const comms_id dst_write = 24;
+static const transport_id dst_read = 42;
+static const transport_id dst_write = 24;
 
-string get_filename(const comms_id id) {
+string get_filename(const transport_id id) {
     stringstream ss;
     ss << id;
     return ss.str();
 }
 
-SCENARIO("comms needs a destination", "[comms_file]") {
-    comms_file cf(dst_read);
-    comms c(move(cf));
-    REQUIRE(c.get_location() == dst_read);
+SCENARIO("transport needs a destination", "[transport_file]") {
+    transport_file tf(dst_read);
+    transport t(move(tf));
+    REQUIRE(t.get_location() == dst_read);
 }
 
-SCENARIO("can write to a communication channel", "[comms_file]") {
-    comms_file cf(dst_read);
-    comms c(move(cf));
+SCENARIO("can write to a communication channel", "[transport_file]") {
+    transport_file tf(dst_read);
+    transport t(move(tf));
 
     WHEN("content is written") {
-        c.send(dst_write, content_line);
+        t.send(dst_write, content_line);
 
         THEN("content is expected to disk") {
             ifstream in(get_filename(dst_write));
@@ -51,48 +51,48 @@ SCENARIO("can write to a communication channel", "[comms_file]") {
     }
 }
 
-SCENARIO("can read from a communication channel", "[comms_file]") {
+SCENARIO("can read from a communication channel", "[transport_file]") {
     const string filename_read = get_filename(dst_read);
     test_utils::empty_file(filename_read);
-    comms_file cf(dst_read);
-    comms c(move(cf));
-    REQUIRE(c.empty());
+    transport_file tf(dst_read);
+    transport t(move(tf));
+    REQUIRE(t.empty());
 
     WHEN("the channel is empty") {
         THEN("content is expected to be empty") {
-            c.receive();
-            REQUIRE(c.empty());
+            t.receive();
+            REQUIRE(t.empty());
         }
     }
     WHEN("the channel has a single line to read") {
         test_utils::write_to_file(filename_read, content_line);
 
         THEN("content is not expected to be empty") {
-            c.receive();
-            REQUIRE(!c.empty());
-            string content = c.get_string();
+            t.receive();
+            REQUIRE(!t.empty());
+            string content = t.get_string();
             REQUIRE(content == content_line);
         }
     }
     
     WHEN("the channel has multiple line to read") {
         const int line_count = 5;
-        ofstream os(filename_read);
+        ofstream os(get_filename(dst_read));
         for (int i = 0; i < line_count; ++i) {
             os << i << content_line << std::endl;
         }
 
         THEN("content is not expected to be empty") {
-            REQUIRE(c.empty());
-            c.receive();
-            REQUIRE(!c.empty());
+            REQUIRE(t.empty());
+            t.receive();
+            REQUIRE(!t.empty());
             for (int i = 0; i < line_count; ++i) {
                 stringstream ss;
                 ss << i << content_line;
                 string expected_content;
                 getline(ss, expected_content);
-                REQUIRE(!c.empty());
-                string content = c.get_string();
+                REQUIRE(!t.empty());
+                string content = t.get_string();
                 REQUIRE(content == expected_content);
             }
         }

@@ -2,7 +2,7 @@
 #ifndef CACOON_AGENT_H
 #define CACOON_AGENT_H
 
-#include "comms.h"
+#include "transport.h"
 #include "datastore.h"
 #include <limits>
 #include <string>
@@ -24,7 +24,7 @@ namespace cacoon {
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
-        :m_comms(transport_type(id)), m_id(id), m_store(STORE_LOCATION) {
+        :m_transport(T(id)), m_id(id), m_store(STORE_LOCATION) {
             m_run.clear();
         }
 
@@ -78,7 +78,7 @@ namespace cacoon {
         }
 
         id_type m_id;
-        comms m_comms;
+        transport m_transport;
         datastore m_store;
 
         std::atomic_flag m_run;
