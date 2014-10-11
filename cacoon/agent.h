@@ -24,7 +24,7 @@ namespace cacoon {
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
-        :m_transport(T(id)), m_id(id), m_store(STORE_LOCATION) {
+        :m_transport(transport_type(id)), m_id(id), m_store(STORE_LOCATION) {
             m_run.clear();
         }
 

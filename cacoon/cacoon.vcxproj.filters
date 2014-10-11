@@ -31,6 +31,12 @@
     <Filter Include="Source Files\transport">
       <UniqueIdentifier>{358bb0c2-1fdd-4294-8d87-5ef2e40c260c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\comms">
+      <UniqueIdentifier>{898e7121-f99a-47a6-9dbb-a99b37514b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\comms">
+      <UniqueIdentifier>{794ddc8e-2fd7-4144-88b8-7bf1ebebf648}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="datastore.cpp">
@@ -47,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="datastore.cpp">
       <Filter>Source Files\datastore</Filter>
+    </ClCompile>
+    <ClCompile Include="comms.cpp">
+      <Filter>Source Files\comms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="datastore.h">
       <Filter>Header Files\datastore</Filter>
+    </ClInclude>
+    <ClInclude Include="comms.h">
+      <Filter>Header Files\comms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
