@@ -1,30 +1,17 @@
 
-#ifndef CACOON_COMMS_H
-#define CACOON_COMMS_H
+#ifndef CACOON_COMMS_MESSAGE_H 
+#define CACOON_COMMS_MESSAGE_H
 
 #include "transport.h"
-#include <string>
-#include <ostream>
+#include "serializable.h"
 
 namespace cacoon {
     namespace comms {
+        
         using comms_id_type = cacoon::transport::id_type;
 
-        namespace exception {
-            struct could_not_deserialize : public std::exception {
-                could_not_deserialize(const std::string& what)
-                    :std::exception(what.c_str()) {}
-            };
-        }
-
-        struct serializable {
-            virtual void serialize(std::ostream& os) = 0;
-            virtual void deserialize(std::istream& is) = 0;
-            static void throw_could_not_deserialize();
-        };
-        
         namespace message {
-
+            
             struct header : public serializable {
                 header(std::istream& is);
                 header(const comms_id_type& src, const comms_id_type& dst);
@@ -53,7 +40,6 @@ namespace cacoon {
             };
 
         }
-
     }
 }
 

@@ -1,6 +1,6 @@
 
 #include "../ext/catch/catch.hpp"
-#include "../cacoon/comms.h"
+#include "../cacoon/message.h"
 #include <iosfwd>
 
 using std::string;

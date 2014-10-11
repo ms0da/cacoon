@@ -54,7 +54,10 @@
     <ClCompile Include="datastore.cpp">
       <Filter>Source Files\datastore</Filter>
     </ClCompile>
-    <ClCompile Include="comms.cpp">
+    <ClCompile Include="serializable.cpp">
+      <Filter>Source Files\comms</Filter>
+    </ClCompile>
+    <ClCompile Include="message.cpp">
       <Filter>Source Files\comms</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,7 +80,10 @@
     <ClInclude Include="datastore.h">
       <Filter>Header Files\datastore</Filter>
     </ClInclude>
-    <ClInclude Include="comms.h">
+    <ClInclude Include="message.h">
+      <Filter>Header Files\comms</Filter>
+    </ClInclude>
+    <ClInclude Include="serializable.h">
       <Filter>Header Files\comms</Filter>
     </ClInclude>
   </ItemGroup>

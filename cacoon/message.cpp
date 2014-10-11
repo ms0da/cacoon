@@ -1,5 +1,5 @@
 
-#include "comms.h"
+#include "message.h"
 
 using std::ostream;
 using std::istream;
@@ -8,18 +8,11 @@ using std::make_unique;
 using std::string;
 using std::move;
 
-// SERIALIZABLE
-using cacoon::comms::serializable;
-using cacoon::comms::exception::could_not_deserialize;
-
-void serializable::throw_could_not_deserialize() {
-    throw could_not_deserialize("Could not deserialize object");
-}
-
-// HEADER
 using cacoon::comms::comms_id_type;
 using cacoon::comms::message::header;
+using cacoon::comms::message::body;
 
+// HEADER
 header::header(istream& is) {
     deserialize(is);
 }
@@ -55,8 +48,6 @@ void header::deserialize(std::istream& is) {
 }
 
 // BODY
-using cacoon::comms::message::body;
-
 body::body(istream& is) {
     deserialize(is);
 }
