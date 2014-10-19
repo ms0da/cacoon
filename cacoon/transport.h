@@ -2,6 +2,8 @@
 #ifndef CACOON_comms_H
 #define CACOON_comms_H
 
+#include "serializable.h"
+
 #include <string>
 #include <list>
 #include <memory>
@@ -30,7 +32,7 @@ namespace cacoon {
             base(const base& c) = delete;
             virtual ~base();
 
-            // TODO: use serializable type instead of string here
+            // TODO use serializable type instead of string here
             void send(const id_type& dst, const std::string& str);
             void receive();
             const std::string get_string();

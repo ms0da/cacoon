@@ -1,5 +1,11 @@
 
 #include "message.h"
+#include <sstream>
+
+using cacoon::comms::comms_id_type;
+using cacoon::comms::message;
+using cacoon::comms::serializable;
+using cacoon::comms::exception::could_not_deserialize;
 
 using std::ostream;
 using std::istream;
@@ -7,75 +13,107 @@ using std::unique_ptr;
 using std::make_unique;
 using std::string;
 using std::move;
-
-using cacoon::comms::comms_id_type;
-using cacoon::comms::message::header;
-using cacoon::comms::message::body;
+using std::stringstream;
 
 // HEADER
-header::header(istream& is) {
-    deserialize(is);
+message::header::header(istream& is) {
+    if(!deserialize(is)) {
+        throw could_not_deserialize("Could not deserialize message::header");
+    }
 }
 
-header::header(const comms_id_type& src, const comms_id_type& dst)
+message::header::header(const comms_id_type& src, const comms_id_type& dst)
 :m_src(src), m_dst(dst) {
 }
 
-header::~header() {
+message::header::~header() {
 }
 
-const comms_id_type& header::get_src() const throw() {
+const comms_id_type& message::header::get_src() const throw() {
     return m_src;
 }
 
-const comms_id_type& header::get_dst() const throw() {
+const comms_id_type& message::header::get_dst() const throw() {
     return m_dst;
 }
 
-void header::serialize(ostream& os) {
+void message::header::serialize(ostream& os) const {
     os << m_src << " " << m_dst;
 }
 
-void header::deserialize(std::istream& is) {
+bool message::header::deserialize(std::istream& is) {
     comms_id_type src, dst;
-    unique_ptr<serializable> ptr(nullptr);
-    if(is >> src && is >> dst) {
+    bool is_read = is >> src && is >> dst;
+    if(is_read) {
         this->m_src = src;
         this->m_dst = dst;
-    } else {
-        throw_could_not_deserialize();
     }
+    return is_read;
 }
 
 // BODY
-body::body(istream& is) {
-    deserialize(is);
+const char message::body::DELIM_START = '~';
+
+message::body::body(istream& is) {
+    if(!deserialize(is)) {
+        throw could_not_deserialize("Could not deserialize message::body");
+    }
 }
 
-body::body(const string& data) 
+message::body::body(const string& data) 
 :m_data(data) {
 }
 
-body::~body() {
+message::body::~body() {
 }
 
-void body::add_data(const string& data) {
+void message::body::add_data(const string& data) {
     m_data.append(data);
 }
 
-std::string body::get_data() const throw() {
+std::string message::body::get_data() const throw() {
     return m_data;
 }
 
-void body::serialize(ostream& os) {
-    os << m_data;
+void message::body::serialize(ostream& os) const {
+    os << DELIM_START << m_data;
 }
 
-void body::deserialize(std::istream& is) {
+bool message::body::deserialize(istream& is) {
     string str;
-    if(is >> str) {
-        m_data = move(str);
-    } else {
-        throw_could_not_deserialize();
+    is >> str;
+    bool is_read = !(is.fail() || is.bad());
+    bool is_delim_present = str.length() > 0 ? DELIM_START == str.at(0) : false;
+    if(is_read && is_delim_present) {
+        m_data = move(str.substr(1, str.length()));
     }
+    return is_read;
+}
+
+// MESSAGE
+message::message(istream& is)
+:m_header(is), m_body(is) {
+}
+
+message::message(const comms_id_type& src, const comms_id_type& dst)
+:m_header(src, dst) {
+}
+
+const comms_id_type& message::get_src() const throw() {
+    return m_header.get_src();
+}
+
+const comms_id_type& message::get_dst() const throw() {
+    return m_header.get_dst();
+}
+
+void message::append(const serializable& obj) {
+    stringstream ss;
+    obj.serialize(ss);
+    m_body.add_data(ss.str());
+}
+
+void message::serialize(ostream& os) const {
+    m_header.serialize(os);
+    m_body.serialize(os);
 }

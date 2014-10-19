@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\comms">
+      <UniqueIdentifier>{71e62072-2cc4-40a2-acf3-93fbd960cc70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent_test.cpp">
@@ -28,7 +31,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="comms_test.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\comms</Filter>
+    </ClCompile>
+    <ClCompile Include="message_test.cpp">
+      <Filter>Source Files\comms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
