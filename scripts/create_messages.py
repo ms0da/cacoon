@@ -243,7 +243,7 @@ class message_factory :
 		self.buffer.add_line(0, "using cacoon::comms::types;")
 		self.buffer.add_line(0, "using cacoon::comms::serializable;")
 		self.buffer.add_line(0, "using cacoon::comms::message_factory;")
-		self.buffer.add_line(0, "const std::map<const types::charU8*, message_factory::serialize_fn> m_map = {content};")
+		self.buffer.add_line(0, "const std::map<const types::charU8*, message_factory::serializable_fn> m_map = {content};")
 
 	def __del__(self) :
 		types_len = len(self.types)
@@ -254,7 +254,7 @@ class message_factory :
 			pairs_content.add_line(0, "{")
 			for i in range(types_len) :
 				line = ""
-				line +=  "{" + "cacoon::comms::{0}::id, &cacoon::comms::{0}::serialize".format(self.types[i].get_name()) + "}"
+				line +=  "{" + "cacoon::comms::{0}::id".format(self.types[i].get_name()) + ", {" + "&cacoon::comms::{0}::serialize, &cacoon::comms::{0}::deserialize".format(self.types[i].get_name()) + "}}"
 				if i == 0 and types_len > 1:
 					line += ","
 				pairs_content.add_line(1, line)
@@ -276,7 +276,7 @@ class messages_builder() :
 
 		xml = None
 		for file in file_list :
-			if(".xml" in file) :
+			if(".xml" in file) :  
 				utils.print.info("Processing " + file)
 				xml = xml_message(self.dir + file)
 				xml.parse()
