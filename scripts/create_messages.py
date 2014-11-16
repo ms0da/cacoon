@@ -117,19 +117,51 @@ class utils :
 			content.add_line(2, "struct " + xml.get_name() + " : public serializable {")
 			content.add_line(3, "static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
 			
-			for attrib in xml.get_attributes() :
+			attribs = xml.get_attributes();
+			for attrib in attribs :
 				comments = ""
 				if "" != attrib.comments :
 					content.add_line(3, "// " + attrib.comments)
 				content.add_line(3, utils.const.namespace_type + attrib.type + " " + attrib.id + ";")
+
+			params = "decltype({0}){2} v{1}"
+			init = "{0}(v{1})"
+			format_if = "('|' == is.get() && is >> v{0})"
+			format_shared_ptr = "v{0}"
+			constructor_params = ""
+			constructor_init = ""
+			deserialize_vars = ""
+			deserialize_if = ""
+			shared_ptr = ""
+			for i in range(len(attribs)) :
+				if i > 0 :
+					constructor_params += ", "
+					constructor_init += ", "
+					deserialize_vars += "; "
+					deserialize_if += " && "
+					shared_ptr += ", "
+				constructor_params += "const " + params.format(attribs[i].id, i, "&")
+				deserialize_vars += params.format(attribs[i].id, i, "")
+				constructor_init += init.format(attribs[i].id, i)
+				deserialize_if += format_if.format(i)
+				shared_ptr += format_shared_ptr.format(i)
+
+			content.add_line(3, xml.get_name() + "({}) ".format(constructor_params))
+			content.add_line(3, " : {}".format(constructor_init) + " { }")
+			content.add_line(3, "static std::shared_ptr<serializable> deserialize(std::istream& is) {")
+			content.add_line(4, "std::shared_ptr<" + xml.get_name() + "> ptr;")
+			content.add_line(4, deserialize_vars + ";")
+			content.add_line(4, "if(" + deserialize_if + ") {")
+			content.add_line(5, "ptr = std::make_shared<" + xml.get_name() + ">(" + shared_ptr + ");")
+			content.add_line(4, "}")
+			content.add_line(4, "return ptr;")
+			content.add_line(3, "}")
 			content.add_line(2, "private:")
-			content.add_line(3, "virtual void serialize_type(std::ostream& os) const {")
-			
+			content.add_line(3, "virtual void serialize_type(std::ostream& os) const override {")
 			attrs = "os << " + utils.const.hash.name
 			for attrib in xml.get_attributes() :
-				attrs += " << \"|\" << " + attrib.id
+				attrs += " << '|' << " + attrib.id
 			content.add_line(4, attrs + ";")
-
 			content.add_line(3, "}")
 			content.add_line(2, "};")
 			content.add_line(1, "}")
@@ -222,7 +254,7 @@ class message_factory :
 			pairs_content.add_line(0, "{")
 			for i in range(types_len) :
 				line = ""
-				line +=  "{" + "cacoon::comms::{0}::id, &cacoon::comms::{0}::serializable::serializeX".format(self.types[i].get_name()) + "}"
+				line +=  "{" + "cacoon::comms::{0}::id, &cacoon::comms::{0}::serialize".format(self.types[i].get_name()) + "}"
 				if i == 0 and types_len > 1:
 					line += ","
 				pairs_content.add_line(1, line)
@@ -252,8 +284,6 @@ class messages_builder() :
 				common_h.add(xml)
 				common_cpp.add(xml)
 				msg_factory.add(xml)
-
-
 
 import argparse
 parser = argparse.ArgumentParser()
