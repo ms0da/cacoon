@@ -27,6 +27,7 @@ class xml_message :
 			hash_buff = utils.digest.sha256(self.name)
 			for attrib in self.attribs : 
 				hash_buff += attrib.hash
+			print(hash_buff)
 			self.hash = utils.digest.sha256(hash_buff)
 		setted = None != self.hash
 		return setted
@@ -77,7 +78,7 @@ class xml_attribute :
 		self.id = id
 		self.type = type
 		self.comments = comments
-		self.hash = utils.digest.sha256(utils.digest.sha256(id) + utils.digest.sha256(type) + utils.digest.sha256(comments))
+		self.hash = utils.digest.sha256(utils.digest.sha256(id) + utils.digest.sha256(type))
 
 import os, hashlib, time
 class utils :
@@ -124,6 +125,7 @@ class utils :
 			content.add_line("namespace messages {")
 			content.tab_inc()
 			content.add_line("struct " + xml.get_name() + " : public serializable {")
+			content.tab_inc()
 			content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
 			
 			attribs = xml.get_attributes();
@@ -182,6 +184,8 @@ class utils :
 			content.add_line("}")
 			content.tab_dec()
 			content.add_line("};")
+			content.tab_dec()
+			content.add_line("}")
 			content.tab_dec()
 			content.add_line("}")
 			content.tab_dec()
@@ -258,7 +262,7 @@ class common_impl :
 		self.content.add_line("") 
 
 	def add(self, xml) :
-		self.content.add_line("const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::" + xml.get_name() + "::" + utils.const.hash.name + "[] = \"" + xml.get_hash() + "\";")
+		self.content.add_line("const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::messages::" + xml.get_name() + "::" + utils.const.hash.name + "[] = \"" + xml.get_hash() + "\";")
 
 class message_factory :
 	def __init__(self, dir) :
@@ -270,7 +274,6 @@ class message_factory :
 		self.buffer.add_line("using cacoon::comms::types;")
 		self.buffer.add_line("using cacoon::comms::serializable;")
 		self.buffer.add_line("using cacoon::comms::message_factory;")
-		self.buffer.add_line("using cacoon::comms::messages;")
 		self.buffer.add_line("const std::map<const types::charU8*, message_factory::serializable_fn> m_map = {content};")
 
 	def __del__(self) :
@@ -283,7 +286,7 @@ class message_factory :
 			pairs_content.tab_inc()
 			for i in range(types_len) :
 				line = ""
-				line +=  "{" + "{0}::id".format(self.types[i].get_name()) + ", {" + "&{0}::serialize, &{0}::deserialize".format(self.types[i].get_name()) + "}}"
+				line +=  "{" + "cacoon::comms::messages::{0}::id".format(self.types[i].get_name()) + ", {" + "&cacoon::comms::messages::{0}::serialize, &cacoon::comms::messages::{0}::deserialize".format(self.types[i].get_name()) + "}}"
 				if i == 0 and types_len > 1:
 					line += ","
 				pairs_content.add_line(line)
