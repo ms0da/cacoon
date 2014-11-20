@@ -81,6 +81,11 @@ class xml_attribute :
 
 import os, hashlib, time
 class utils :
+	class extension :
+		def get_header() :
+			return ".generated.h"
+		def get_source() :
+			return ".generated.cpp"
 	class print :
 		def info(msg) :
 			print("[*] " + msg )
@@ -105,24 +110,28 @@ class utils :
 			file.write(content)
 			file.close()
 		def write_header(outdir, xml) :
-			define = xml.get_name().upper() + "_H"
+			define = xml.get_name().upper() + "_GENERATED_H"
 
 			content = utils.file_content()
-			content.add_line(0, "#ifndef " + define)
-			content.add_line(0, "#define " + define)
-			content.add_line(0, utils.const.generated_warning)
-			content.add_line(0, "#include \"../../cacoon/message.h\"")
-			content.add_line(0, "namespace cacoon {")
-			content.add_line(1, "namespace comms {")
-			content.add_line(2, "struct " + xml.get_name() + " : public serializable {")
-			content.add_line(3, "static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
+			content.add_line("#ifndef " + define)
+			content.add_line("#define " + define)
+			content.add_line(utils.const.generated_warning)
+			content.add_line("#include \"../../cacoon/message.h\"")
+			content.add_line("namespace cacoon {")
+			content.tab_inc()
+			content.add_line("namespace comms {")
+			content.tab_inc()
+			content.add_line("namespace messages {")
+			content.tab_inc()
+			content.add_line("struct " + xml.get_name() + " : public serializable {")
+			content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
 			
 			attribs = xml.get_attributes();
 			for attrib in attribs :
 				comments = ""
 				if "" != attrib.comments :
-					content.add_line(3, "// " + attrib.comments)
-				content.add_line(3, utils.const.namespace_type + attrib.type + " " + attrib.id + ";")
+					content.add_line("// " + attrib.comments)
+				content.add_line(utils.const.namespace_type + attrib.type + " " + attrib.id + ";")
 
 			params = "decltype({0}){2} v{1}"
 			init = "{0}(v{1})"
@@ -146,37 +155,55 @@ class utils :
 				deserialize_if += format_if.format(i)
 				shared_ptr += format_shared_ptr.format(i)
 
-			content.add_line(3, xml.get_name() + "({}) ".format(constructor_params))
-			content.add_line(3, " : {}".format(constructor_init) + " { }")
-			content.add_line(3, "static std::shared_ptr<serializable> deserialize(std::istream& is) {")
-			content.add_line(4, "std::shared_ptr<" + xml.get_name() + "> ptr;")
-			content.add_line(4, deserialize_vars + ";")
-			content.add_line(4, "if(" + deserialize_if + ") {")
-			content.add_line(5, "ptr = std::make_shared<" + xml.get_name() + ">(" + shared_ptr + ");")
-			content.add_line(4, "}")
-			content.add_line(4, "return ptr;")
-			content.add_line(3, "}")
-			content.add_line(2, "private:")
-			content.add_line(3, "virtual void serialize_type(std::ostream& os) const override {")
+			content.add_line(xml.get_name() + "({}) ".format(constructor_params))
+			content.add_line(" : {}".format(constructor_init) + " { }")
+			content.add_line("static std::shared_ptr<serializable> deserialize(std::istream& is) {")
+			content.tab_inc()
+			content.add_line("std::shared_ptr<" + xml.get_name() + "> ptr;")
+			content.add_line(deserialize_vars + ";")
+			content.add_line("if(" + deserialize_if + ") {")
+			content.tab_inc()
+			content.add_line("ptr = std::make_shared<" + xml.get_name() + ">(" + shared_ptr + ");")
+			content.tab_dec()
+			content.add_line("}")
+			content.add_line("return ptr;")
+			content.tab_dec()
+			content.add_line("}")
+			content.tab_dec()
+			content.add_line("private:")
+			content.tab_inc()
+			content.add_line("virtual void serialize_type(std::ostream& os) const override {")
 			attrs = "os << " + utils.const.hash.name
 			for attrib in xml.get_attributes() :
 				attrs += " << '|' << " + attrib.id
-			content.add_line(4, attrs + ";")
-			content.add_line(3, "}")
-			content.add_line(2, "};")
-			content.add_line(1, "}")
-			content.add_line(0, "}")
-			content.add_line(0, "#endif " + define)
-			utils.file.write(outdir + xml.get_name() + ".h", content.get_buffer())
+			content.tab_inc()
+			content.add_line(attrs + ";")
+			content.tab_dec()
+			content.add_line("}")
+			content.tab_dec()
+			content.add_line("};")
+			content.tab_dec()
+			content.add_line("}")
+			content.tab_dec()
+			content.add_line("}")
+			content.add_line("#endif " + define)
+			utils.file.write(outdir + xml.get_name() + utils.extension.get_header(), content.get_buffer())
 
 	class file_content :
 		def __init__(self) :
 			self.buffer = ""
+			self.tabs = 0
+		def tab_inc(self) :
+			self.tabs += 1
+		def tab_dec(self) :
+			if self.tabs > 0 :
+				self.tabs -= 1
 		def add_tab(self, count) :
 			for i in range(count) :
 				self.buffer += "\t"
-		def add_line(self, tabs = 0, content = "") :
-			self.add_tab(tabs)
+		def add_line(self, content = "") :
+			for i in range(self.tabs) :
+				self.buffer += "\t"
 			self.buffer += content + "\n"
 		def get_buffer(self) :
 			return self.buffer
@@ -196,26 +223,26 @@ class utils :
 class common_header :
 	name = "messages_types_includes"
 	def __init__(self, outdir) :
-		self.path = outdir + common_header.name + ".h"
+		self.path = outdir + common_header.name + utils.extension.get_header()
 		self.__init_content()
 	def __del__(self) :
 		self.__del_content()
 		utils.file.write(self.path, self.content)
 
 	def __init_content(self) :
-		self.content = "#ifndef " + common_header.name.upper() + "_H\n"
-		self.content += "#define " + common_header.name.upper() + "_H\n"
+		self.content = "#ifndef " + common_header.name.upper() + "_GENERATED_H\n"
+		self.content += "#define " + common_header.name.upper() + "_GENERATED_H\n"
 		self.content += utils.const.generated_warning + "\n"
 	def __del_content(self) :
 		self.content += "#endif\n"
 
 	def add(self, xml) :
-		self.content += "#include \"" + xml.get_name() + ".h\"\n"
+		self.content += "#include \"" + xml.get_name() + utils.extension.get_header() + "\"\n"
 
 class common_impl :
 	def __init__(self, dir) :
 		self.name = "messages_types_implementation"
-		self.path = dir + self.name + ".cpp"
+		self.path = dir + self.name + utils.extension.get_source()
 		self.__init_content()
 	def __del__(self) :
 		self.__del_content()
@@ -223,27 +250,28 @@ class common_impl :
 
 	def __init_content(self) :
 		self.content = utils.file_content()
-		self.content.add_line(0, utils.const.generated_warning)
-		self.content.add_line(0, "#include \"" + common_header.name + ".h\"")
-		self.content.add_line(0, "using cacoon::comms::types;")
+		self.content.add_line(utils.const.generated_warning)
+		self.content.add_line("#include \"" + common_header.name + utils.extension.get_header() + "\"")
+		self.content.add_line("using cacoon::comms::types;")
 
 	def __del_content(self) :
-		self.content.add_line(0, "") 
+		self.content.add_line("") 
 
 	def add(self, xml) :
-		self.content.add_line(0, "const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::" + xml.get_name() + "::" + utils.const.hash.name + "[] = \"" + xml.get_hash() + "\";")
+		self.content.add_line("const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::" + xml.get_name() + "::" + utils.const.hash.name + "[] = \"" + xml.get_hash() + "\";")
 
 class message_factory :
 	def __init__(self, dir) :
 		self.name = "message_factory"
-		self.path = dir + self.name + ".cxx"
+		self.path = dir + self.name + utils.extension.get_source()
 		self.types = list()
 		self.buffer = utils.file_content()
-		self.buffer.add_line(0, "#include \"message_factory.h\"")
-		self.buffer.add_line(0, "using cacoon::comms::types;")
-		self.buffer.add_line(0, "using cacoon::comms::serializable;")
-		self.buffer.add_line(0, "using cacoon::comms::message_factory;")
-		self.buffer.add_line(0, "const std::map<const types::charU8*, message_factory::serializable_fn> m_map = {content};")
+		self.buffer.add_line("#include \"message_factory.h\"")
+		self.buffer.add_line("using cacoon::comms::types;")
+		self.buffer.add_line("using cacoon::comms::serializable;")
+		self.buffer.add_line("using cacoon::comms::message_factory;")
+		self.buffer.add_line("using cacoon::comms::messages;")
+		self.buffer.add_line("const std::map<const types::charU8*, message_factory::serializable_fn> m_map = {content};")
 
 	def __del__(self) :
 		types_len = len(self.types)
@@ -251,13 +279,14 @@ class message_factory :
 			pairs_str = "{}"
 		else :
 			pairs_content = utils.file_content()
-			pairs_content.add_line(0, "{")
+			pairs_content.add_line("{")
+			pairs_content.tab_inc()
 			for i in range(types_len) :
 				line = ""
-				line +=  "{" + "cacoon::comms::{0}::id".format(self.types[i].get_name()) + ", {" + "&cacoon::comms::{0}::serialize, &cacoon::comms::{0}::deserialize".format(self.types[i].get_name()) + "}}"
+				line +=  "{" + "{0}::id".format(self.types[i].get_name()) + ", {" + "&{0}::serialize, &{0}::deserialize".format(self.types[i].get_name()) + "}}"
 				if i == 0 and types_len > 1:
 					line += ","
-				pairs_content.add_line(1, line)
+				pairs_content.add_line(line)
 			pairs_str = pairs_content.get_buffer() + "}"
 		utils.file.write(self.path, self.buffer.get_buffer().format(content=pairs_str))
 
@@ -265,34 +294,38 @@ class message_factory :
 		self.types.append(xml)
 
 class messages_builder() :
-	def __init__(self, outdir) :
-		self.dir = outdir
+	def __init__(self, dir_in, dir_out) :
+		self.dir_in = dir_in
+		self.dir_out = dir_out
 
 	def build(self) :
-		file_list = os.listdir(self.dir)
-		common_h = common_header(self.dir)
-		common_cpp = common_impl(self.dir)
-		msg_factory = message_factory(self.dir)
+		file_list = os.listdir(self.dir_in)
+		if not os.path.exists(self.dir_out) :
+			os.makedirs(self.dir_out)
+		common_h = common_header(self.dir_out)
+		common_cpp = common_impl(self.dir_out)
+		msg_factory = message_factory(self.dir_out)
 
 		xml = None
 		for file in file_list :
 			if(".xml" in file) :  
 				utils.print.info("Processing " + file)
-				xml = xml_message(self.dir + file)
+				xml = xml_message(self.dir_in + file)
 				xml.parse()
-				utils.file.write_header(self.dir, xml)
+				utils.file.write_header(self.dir_out, xml)
 				common_h.add(xml)
 				common_cpp.add(xml)
 				msg_factory.add(xml)
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("directory", help="directory containing messages metadata (xml)")
+parser.add_argument("in_directory", help="directory containing messages metadata (xml)")
+parser.add_argument("out_directory", help="directory to output files")
 args = parser.parse_args()
 
-if(args.directory) :
+if(args.in_directory) :
 	#dir = "../libs/comms/messaging/messages_definitions/"
-	builder = messages_builder(args.directory + "/")
+	builder = messages_builder(args.in_directory + "/", args.out_directory + "/")
 	builder.build()
 else :
 	parse.print_help()

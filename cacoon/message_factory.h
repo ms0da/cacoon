@@ -3,8 +3,10 @@
 #define CACOON_COMMS_MESSAGE_FACTORY_H
 
 #include "serializable.h"
-#include "../cacoon_test/messages_definitions/messages_types_includes.h"
+#include "../cacoon_test/generated/messages_types_includes.generated.h"
+#include "message.h"
 #include <map>
+#include <memory>
 
 namespace cacoon {
     namespace comms {
@@ -19,7 +21,7 @@ namespace cacoon {
                 const deserialize_fn deserialize;
             };
 
-            static const std::map<const types::charU8*, serializable_fn> m_map;
+            static const std::map<const cacoon::types::charU8*, serializable_fn> m_map;
         };
 
     }

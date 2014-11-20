@@ -14,6 +14,7 @@ using std::make_unique;
 using std::string;
 using std::move;
 using std::stringstream;
+using std::make_unique;
 
 // HEADER
 message::header::header(istream& is) {
@@ -54,39 +55,53 @@ bool message::header::deserialize(std::istream& is) {
 // BODY
 const char message::body::DELIM_START = '~';
 
+message::body::body() {
+}
+
 message::body::body(istream& is) {
     if(!deserialize(is)) {
         throw could_not_deserialize("Could not deserialize message::body");
     }
 }
 
-message::body::body(const string& data) 
-:m_data(data) {
-}
-
 message::body::~body() {
 }
 
-void message::body::add_data(const string& data) {
-    m_data.append(data);
+bool message::body::is_empty() const {
+    return m_list.empty();
 }
 
-std::string message::body::get_data() const throw() {
-    return m_data;
+void message::body::add(const serializable&& obj) {
+    m_list.emplace_back(make_unique<serializable>(obj));
 }
 
 void message::body::serialize(ostream& os) const {
-    os << DELIM_START << m_data;
+    os << DELIM_START;
+    for(const auto &obj : m_list) {
+        //obj->serialize(os);
+    }
 }
 
+// TODO complete deserialization
 bool message::body::deserialize(istream& is) {
-    string str;
-    is >> str;
-    bool is_read = !(is.fail() || is.bad());
-    bool is_delim_present = str.length() > 0 ? DELIM_START == str.at(0) : false;
-    if(is_read && is_delim_present) {
-        m_data = move(str.substr(1, str.length()));
+    bool is_read = is.good();
+    if(is_read) {
+        auto c = is.peek();
+        is_read = DELIM_START == c;
+        if(is_read) {
+            c = is.get();
+
+            //m_list.emplace_back(
+
+        }
     }
+    //string str;
+    //is >> str;
+    //bool is_read = !(is.fail() || is.bad());
+    //bool is_delim_present = str.length() > 0 ? DELIM_START == str.at(0) : false;
+    //if(is_read && is_delim_present) {
+    //    m_data = move(str.substr(1, str.length()));
+    //}
     return is_read;
 }
 
@@ -107,13 +122,11 @@ const comms_id_type& message::get_dst() const throw() {
     return m_header.get_dst();
 }
 
-void message::append(const serializable& obj) {
-    stringstream ss;
-    obj.serialize(ss);
-    m_body.add_data(ss.str());
+void message::append(const serializable&& obj) {
+    m_body.add(move(obj));
 }
 
-void message::serialize(ostream& os) const {
+void message::serialize_type(ostream& os) const {
     m_header.serialize(os);
     m_body.serialize(os);
 }

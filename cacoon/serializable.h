@@ -16,10 +16,12 @@ namespace cacoon {
         }
 
         struct serializable {
-        //protected:
-            virtual void serialize(std::ostream& os) const = 0;
-            //virtual void deserialize(std::istream& is) = 0;
-            //static void throw_could_not_deserialize();
+            static void serialize(const serializable& s, std::ostream& os) {
+                s.serialize_type(os);
+            }
+        private:
+            virtual void serialize_type(std::ostream& os) const {
+            };
         };
     }
 }

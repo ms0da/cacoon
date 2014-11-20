@@ -5,9 +5,19 @@
 #include "transport.h"
 #include "serializable.h"
 
+#include <list>
+#include <memory>
+
+#include <map>
+
 namespace cacoon {
     namespace comms {
-        
+
+        struct types {
+            using charU8 = char;
+            using intU32 = unsigned int;
+        };
+
         using comms_id_type = cacoon::transport::id_type;
 
         struct message : public serializable {
@@ -28,18 +38,20 @@ namespace cacoon {
             };
 
             struct body {
+                body();
                 body(std::istream& is);
-                body(const std::string& data = "");
                 virtual ~body();
 
-                void add_data(const std::string& data);
-                std::string get_data() const throw();
+                bool is_empty() const;
+                void add(const serializable&& obj);
+
                 void serialize(std::ostream& os) const;
             private:
                 static const char DELIM_START;
                 bool deserialize(std::istream& os);
-
-                std::string m_data;
+                
+                using list_value_type = std::unique_ptr<serializable>;
+                std::list<list_value_type> m_list;
             };
 
 
@@ -49,9 +61,9 @@ namespace cacoon {
             const comms_id_type& get_src() const throw();
             const comms_id_type& get_dst() const throw();
 
-            void append(const serializable& obj);
+            void append(const serializable&& obj);
 
-            virtual void serialize(std::ostream& os) const override;
+            virtual void serialize_type(std::ostream& os) const override;
         private:
             header m_header;
             body m_body;
