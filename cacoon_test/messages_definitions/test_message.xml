@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<message>
+  <name>
+    test_message
+  </name>
+  <attributes>
+    <attribute>
+      <name>value0</name>
+      <type>intU32</type>
+      <comments></comments>
+    </attribute>
+    <attribute>
+      <name>value1</name>
+      <type>intU32</type>
+      <comments></comments>
+    </attribute>    
+  </attributes>
+</message>

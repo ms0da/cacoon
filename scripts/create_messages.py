@@ -27,7 +27,6 @@ class xml_message :
 			hash_buff = utils.digest.sha256(self.name)
 			for attrib in self.attribs : 
 				hash_buff += attrib.hash
-			print(hash_buff)
 			self.hash = utils.digest.sha256(hash_buff)
 		setted = None != self.hash
 		return setted
@@ -163,7 +162,16 @@ class utils :
 			content.tab_inc()
 			content.add_line("std::shared_ptr<" + xml.get_name() + "> ptr;")
 			content.add_line(deserialize_vars + ";")
-			content.add_line("if(" + deserialize_if + ") {")
+			"""
+			content.add_line("bool failed = false;")
+			content.add_line("for(int i = 0; i < 64 && !failed; ++i) {")
+			content.tab_inc()
+			content.add_line("char j = is.get();")
+			content.add_line("failed = id[i] != j;")
+			content.tab_dec()
+			content.add_line("}")
+			"""
+			content.add_line("if(/*!failed && */" + deserialize_if + ") {")
 			content.tab_inc()
 			content.add_line("ptr = std::make_shared<" + xml.get_name() + ">(" + shared_ptr + ");")
 			content.tab_dec()

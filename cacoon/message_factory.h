@@ -8,22 +8,22 @@
 #include <map>
 #include <memory>
 
+using cacoon::comms::types;
+
 namespace cacoon {
     namespace comms {
-
         struct message_factory {
 
             struct serializable_fn {
                 using serialize_fn = decltype(&serializable::serialize);
                 using deserialize_fn = std::shared_ptr<serializable> (*)(std::istream& is);
-
+                
                 const serialize_fn serialize;
                 const deserialize_fn deserialize;
-            };
+            }; 
 
-            static const std::map<const cacoon::types::charU8*, serializable_fn> m_map;
+            static const std::map<const types::charU8*, serializable_fn> m_map;
         };
-
     }
 }
 

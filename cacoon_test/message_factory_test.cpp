@@ -1,6 +1,7 @@
 
 #include "../ext/catch/catch.hpp"
 #include "../cacoon/message.h"
+#include "../cacoon/message_factory.h"
 
 #include <string>
 #include <iosfwd>
@@ -13,7 +14,6 @@ using cacoon::comms::exception::could_not_deserialize;
 using std::string;
 using std::stringstream;
 
-
 static const comms_id_type ID_SRC(123);
 static const comms_id_type ID_SRC1(42);
 static const comms_id_type ID_DST(456);
@@ -21,10 +21,12 @@ static const comms_id_type ID_DST1(24);
 static const string BODY_BASE("H3ll0");
 static const string BODY_TO_ADD(" world!!");
 
-#include "../cacoon/message_factory.h"
+
 
 SCENARIO("the message type exists", "[comms::message_factory]") {
     
+
+
     /*
     auto x = cacoon::comms::message_factory::m_map.at(0);
     auto msg = cacoon::comms::test_message(1, 2);
@@ -171,3 +173,4 @@ SCENARIO("serialization/deserialization", "[comms::message]") {
 
             
         }*/
+

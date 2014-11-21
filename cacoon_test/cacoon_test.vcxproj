@@ -83,7 +83,8 @@
     <ClCompile Include="agent_test.cpp" />
     <ClCompile Include="generated\messages_types_implementation.generated.cpp" />
     <ClCompile Include="generated\message_factory.generated.cpp" />
-    <ClCompile Include="message_test.cpp" />
+    <ClCompile Include="message_factory_test.cpp" />
+    <ClCompile Include="message_test_test.cpp" />
     <ClCompile Include="transport_test.cpp" />
     <ClCompile Include="datastore_test.cpp" />
     <ClCompile Include="test_utils.h" />
@@ -91,7 +92,6 @@
   <ItemGroup>
     <ClInclude Include="cacoon_test.h" />
     <ClInclude Include="generated\messages_types_includes.generated.h" />
-    <ClInclude Include="messages_definitions\test_message.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cacoon\cacoon.vcxproj">
