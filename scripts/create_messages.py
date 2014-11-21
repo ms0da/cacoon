@@ -282,7 +282,7 @@ class message_factory :
 		self.buffer.add_line("using cacoon::comms::types;")
 		self.buffer.add_line("using cacoon::comms::serializable;")
 		self.buffer.add_line("using cacoon::comms::message_factory;")
-		self.buffer.add_line("const std::map<const types::charU8*, message_factory::serializable_fn> m_map = {content};")
+		self.buffer.add_line("const std::map<const types::charU8*, message_factory::serializable_fn> message_factory::m_map = {content};")
 
 	def __del__(self) :
 		types_len = len(self.types)
