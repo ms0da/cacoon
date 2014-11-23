@@ -37,7 +37,7 @@ SCENARIO("start and stop", "[agent]") {
         THEN("the agent should be running") {
             REQUIRE(agent.is_running());
             AND_WHEN("the agent is stopped") {
-                agent.try_stop();
+                agent.stop();
                 THEN("the agent is not running anymore") {
                     REQUIRE(!agent.is_running());
                 }
