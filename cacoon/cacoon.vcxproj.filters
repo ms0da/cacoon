@@ -63,6 +63,9 @@
     <ClCompile Include="message.cpp">
       <Filter>Source Files\comms</Filter>
     </ClCompile>
+    <ClCompile Include="message_factory.cpp">
+      <Filter>Source Files\comms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h">
@@ -86,9 +89,6 @@
     <ClInclude Include="serializable.h">
       <Filter>Header Files\comms</Filter>
     </ClInclude>
-    <ClInclude Include="comms.h">
-      <Filter>Header Files\comms</Filter>
-    </ClInclude>
     <ClInclude Include="message_factory.h">
       <Filter>Header Files\comms</Filter>
     </ClInclude>
@@ -97,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="module.h">
       <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>Header Files\comms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -125,6 +125,7 @@ class utils :
 			content.tab_inc()
 			content.add_line("struct " + xml.get_name() + " : public serializable {")
 			content.tab_inc()
+			#content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
 			content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
 			
 			attribs = xml.get_attributes();
@@ -162,16 +163,7 @@ class utils :
 			content.tab_inc()
 			content.add_line("std::shared_ptr<" + xml.get_name() + "> ptr;")
 			content.add_line(deserialize_vars + ";")
-			"""
-			content.add_line("bool failed = false;")
-			content.add_line("for(int i = 0; i < 64 && !failed; ++i) {")
-			content.tab_inc()
-			content.add_line("char j = is.get();")
-			content.add_line("failed = id[i] != j;")
-			content.tab_dec()
-			content.add_line("}")
-			"""
-			content.add_line("if(/*!failed && */" + deserialize_if + ") {")
+			content.add_line("if(" + deserialize_if + ") {")
 			content.tab_inc()
 			content.add_line("ptr = std::make_shared<" + xml.get_name() + ">(" + shared_ptr + ");")
 			content.tab_dec()
@@ -282,7 +274,7 @@ class message_factory :
 		self.buffer.add_line("using cacoon::comms::types;")
 		self.buffer.add_line("using cacoon::comms::serializable;")
 		self.buffer.add_line("using cacoon::comms::message_factory;")
-		self.buffer.add_line("const std::map<const types::charU8*, message_factory::serializable_fn> message_factory::m_map = {content};")
+		self.buffer.add_line("const message_factory::container_type message_factory::m_map = {content};")
 
 	def __del__(self) :
 		types_len = len(self.types)
@@ -294,7 +286,7 @@ class message_factory :
 			pairs_content.tab_inc()
 			for i in range(types_len) :
 				line = ""
-				line +=  "{" + "cacoon::comms::messages::{0}::id".format(self.types[i].get_name()) + ", {" + "&cacoon::comms::messages::{0}::serialize, &cacoon::comms::messages::{0}::deserialize".format(self.types[i].get_name()) + "}}"
+				line +=  "{message_factory::key_type(" + "cacoon::comms::messages::{0}::id".format(self.types[i].get_name()) + "), {" + "&cacoon::comms::messages::{0}::serialize, &cacoon::comms::messages::{0}::deserialize".format(self.types[i].get_name()) + "}}"
 				if i == 0 and types_len > 1:
 					line += ","
 				pairs_content.add_line(line)

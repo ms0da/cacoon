@@ -15,6 +15,7 @@ namespace cacoon {
 
         struct types {
             using charU8 = char;
+            using intU8 = charU8;
             using intU32 = unsigned int;
         };
 

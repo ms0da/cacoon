@@ -10,6 +10,29 @@ using std::move;
 
 using agent_file_type = agent<file>;
 
+SCENARIO("agent start and stop", "[agent]") {
+    using module_type = agent_file_type;
+    module_type m;
+
+    GIVEN("a new agent") {
+        THEN("the agent should not be running") {
+            REQUIRE(!m.is_running());    
+        }
+    }
+    GIVEN("the agent starts") {
+        m.start();
+        THEN("the agent should be running") {
+            REQUIRE(m.is_running());
+            AND_WHEN("the agent is stopped") {
+                m.stop();
+                THEN("the agent is not running anymore") {
+                    REQUIRE(!m.is_running());
+                }
+            }
+        }
+    }
+}
+
 SCENARIO("give and retrieve the id of an agent", "[agent]") {  
     agent_file_type agent;
     REQUIRE(cacoon::agent_id::DEFAULT_ID == agent.get_id());
@@ -20,28 +43,6 @@ SCENARIO("give and retrieve the id of an agent", "[agent]") {
 
         WHEN("the new value of id can be retrieved and should match") {
             REQUIRE(new_id == agent.get_id());
-        }
-    }
-}
-
-SCENARIO("start and stop", "[agent]") {
-    agent_file_type agent;
-
-    GIVEN("a new agent") {
-        THEN("the agent should not be running") {
-            REQUIRE(!agent.is_running());    
-        }
-    }
-    GIVEN("the agent starts") {
-        agent.start();
-        THEN("the agent should be running") {
-            REQUIRE(agent.is_running());
-            AND_WHEN("the agent is stopped") {
-                agent.stop();
-                THEN("the agent is not running anymore") {
-                    REQUIRE(!agent.is_running());
-                }
-            }
         }
     }
 }

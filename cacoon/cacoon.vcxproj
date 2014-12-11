@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="message.cpp" />
+    <ClCompile Include="message_factory.cpp" />
     <ClCompile Include="serializable.cpp" />
     <ClCompile Include="transport_file.cpp" />
     <ClCompile Include="transport.cpp" />
@@ -72,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h" />
-    <ClInclude Include="comms.h" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="message.h" />
     <ClInclude Include="message_factory.h" />
     <ClInclude Include="module.h" />

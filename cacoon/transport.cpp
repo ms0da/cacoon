@@ -31,7 +31,7 @@ void base::receive() {
 const string base::get_string() {
     string line(m_content.front());
     m_content.pop_front();
-    return move(line);
+    return line;
 }
 
 bool base::empty() const throw() {

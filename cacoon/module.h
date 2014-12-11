@@ -10,6 +10,13 @@ namespace cacoon {
     namespace common {
 
         struct module {
+            using sleep_duration_type = std::chrono::milliseconds;
+
+            module(const sleep_duration_type& sleep_duration = sleep_duration_type(0))
+            :m_sleep_duration(sleep_duration) {
+                m_run.clear();
+            }
+
             void start() {
                 if(!m_run.test_and_set()) {
                     m_main_thread = std::move(std::thread(&module::main_loop, this));
@@ -33,10 +40,6 @@ namespace cacoon {
             }
 
         protected:
-            void init() {
-                m_run.clear();
-            }
-
             virtual ~module() {
                 stop();
                 if(is_running()) {
@@ -50,12 +53,14 @@ namespace cacoon {
             void main_loop() {
                 while(m_run.test_and_set()) {
                     loop();
+                    std::this_thread::sleep_for(m_sleep_duration);
                 }
                 m_run.clear();
             }
 
             virtual void loop() = 0;
-
+            
+            sleep_duration_type m_sleep_duration;
             std::atomic_flag m_run;
             std::thread m_main_thread;
             std::condition_variable m_cond_stop;

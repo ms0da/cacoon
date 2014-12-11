@@ -56,8 +56,7 @@
       <AdditionalDependencies>cacoon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)messages_definitions $(ProjectDir)generated
-</Command>
+      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)messages_definitions $(ProjectDir)generated</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,12 +74,12 @@
       <AdditionalDependencies>cacoon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)messages_definitions $(ProjectDir)generated
-</Command>
+      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)messages_definitions $(ProjectDir)generated</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="agent_test.cpp" />
+    <ClCompile Include="comms_test.cpp" />
     <ClCompile Include="generated\messages_types_implementation.generated.cpp" />
     <ClCompile Include="generated\message_factory.generated.cpp" />
     <ClCompile Include="message_factory_test.cpp" />

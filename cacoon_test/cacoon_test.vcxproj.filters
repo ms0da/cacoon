@@ -45,6 +45,9 @@
     <ClCompile Include="message_test_test.cpp">
       <Filter>Source Files\comms</Filter>
     </ClCompile>
+    <ClCompile Include="comms_test.cpp">
+      <Filter>Source Files\comms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cacoon_test.h">

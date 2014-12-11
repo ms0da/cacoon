@@ -23,8 +23,7 @@ namespace cacoon {
         using id_type = agent_id::value_type;
 
         agent(id_type id = agent_id::DEFAULT_ID)
-        :m_transport(transport_type(id)), m_id(id), m_store(STORE_LOCATION) {
-            this->init();
+        :module(std::chrono::milliseconds(0)), m_transport(transport_type(id)), m_id(id), m_store(STORE_LOCATION) {
         }
 
         virtual ~agent() {
@@ -38,8 +37,8 @@ namespace cacoon {
             return m_id;
         }
     private:
-        virtual void loop() {
-            //std::cout << ".";
+        virtual void loop() override {
+            std::cout << ".";
         }
 
         id_type m_id;
