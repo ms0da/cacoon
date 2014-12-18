@@ -6,12 +6,12 @@
   <attributes>
     <attribute>
       <name>value0</name>
-      <type>intU32</type>
+      <type>types::intU32</type>
       <comments></comments>
     </attribute>
     <attribute>
       <name>value1</name>
-      <type>intU32</type>
+      <type>types::intU32</type>
       <comments></comments>
     </attribute>    
   </attributes>

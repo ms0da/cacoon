@@ -125,15 +125,14 @@ class utils :
 			content.tab_inc()
 			content.add_line("struct " + xml.get_name() + " : public serializable {")
 			content.tab_inc()
-			#content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
-			content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + "[65];")
+			content.add_line("static const " + utils.const.namespace_type + utils.const.hash.type + " " + utils.const.hash.name + ";")
 			
 			attribs = xml.get_attributes();
 			for attrib in attribs :
 				comments = ""
 				if "" != attrib.comments :
 					content.add_line("// " + attrib.comments)
-				content.add_line(utils.const.namespace_type + attrib.type + " " + attrib.id + ";")
+				content.add_line(attrib.type + " " + attrib.id + ";")
 
 			params = "decltype({0}){2} v{1}"
 			init = "{0}(v{1})"
@@ -175,10 +174,11 @@ class utils :
 			content.add_line("private:")
 			content.tab_inc()
 			content.add_line("virtual void serialize_type(std::ostream& os) const override {")
-			attrs = "os << " + utils.const.hash.name
+			content.tab_inc()
+			content.add_line("serialize_id(os, id);")
+			attrs = "os "
 			for attrib in xml.get_attributes() :
 				attrs += " << '|' << " + attrib.id
-			content.tab_inc()
 			content.add_line(attrs + ";")
 			content.tab_dec()
 			content.add_line("}")
@@ -190,7 +190,7 @@ class utils :
 			content.add_line("}")
 			content.tab_dec()
 			content.add_line("}")
-			content.add_line("#endif " + define)
+			content.add_line("#endif")
 			utils.file.write(outdir + xml.get_name() + utils.extension.get_header(), content.get_buffer())
 
 	class file_content :
@@ -219,10 +219,12 @@ class utils :
 			return d
 	class const :
 		generated_warning = "/* AUTO-GENERATED FILE, MODIFY AT YOUR OWN RISK */\n/* GENERATED ON: " + time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime()) + "*/"
-		namespace_type = "types::"
+		namespace_type = "serializable::"
 		class hash :
-			type = "charU8"
+			type = "id_type"
+			type_size = 8
 			name = "id"
+			array_len = 8
 
 class common_header :
 	name = "messages_types_includes"
@@ -256,13 +258,25 @@ class common_impl :
 		self.content = utils.file_content()
 		self.content.add_line(utils.const.generated_warning)
 		self.content.add_line("#include \"" + common_header.name + utils.extension.get_header() + "\"")
-		self.content.add_line("using cacoon::comms::types;")
+		self.content.add_line("using cacoon::comms::serializable;")
 
 	def __del_content(self) :
 		self.content.add_line("") 
 
 	def add(self, xml) :
-		self.content.add_line("const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::messages::" + xml.get_name() + "::" + utils.const.hash.name + "[] = \"" + xml.get_hash() + "\";")
+		self.content.add_line("const " + utils.const.namespace_type + utils.const.hash.type + " cacoon::comms::messages::" + xml.get_name() + "::" + utils.const.hash.name + " = {")
+		self.content.tab_inc()
+		start = 0
+		end = utils.const.hash.type_size
+		for i in range(utils.const.hash.array_len) :
+			line = "0x" + xml.get_hash()[start:end]
+			if i != utils.const.hash.array_len - 1 :
+				line += ","
+			self.content.add_line(line)
+			start += utils.const.hash.type_size
+			end += utils.const.hash.type_size
+		self.content.tab_dec()
+		self.content.add_line("};")
 
 class message_factory :
 	def __init__(self, dir) :
