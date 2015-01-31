@@ -17,11 +17,18 @@ namespace cacoon {
 
             struct key_type {
                 static const types::intU8 key_len = serializable::id_len;
-                const types::intU32* m_key;
-                key_type(const types::intU32* k = nullptr) 
-                :m_key(k) { 
-                }
+                types::intU32 m_key[key_len];
+                key_type(const types::intU32* k = nullptr) { 
+                    const bool is_null = nullptr == k;
+                    for (int i = 0; i < key_len; ++i) {
+                        m_key[i] = is_null ? 0 : k[i];
+                    }
+                }                
             };
+            
+			static void serialize(std::ostream& os, const serializable& obj);
+            static bool message_factory::deserialize(std::istream& is, key_type* key, std::shared_ptr<serializable>* const obj);
+            using hash_type = std::hash<const key_type>;
 
             struct serializable_fn {
                 using serialize_fn = decltype(&serializable::serialize);
@@ -32,15 +39,13 @@ namespace cacoon {
             }; 
 
             // stream utility
-            //static bool get_id(std::istream& is, key_type& key);
-            static std::shared_ptr<key_type> get_id(std::istream& is);
-
-            static const serializable_fn* const get_fns(const key_type& key);
-            static std::shared_ptr<serializable> deserialize(std::istream& is, const serializable_fn* const fns);
-            static void serialize(std::ostream& os, const serializable& obj);
-
-            using hash_type = std::hash<const key_type>;
-
+            struct stream_utility {
+                static std::shared_ptr<key_type> get_id(std::istream& is);
+                static const serializable_fn* const get_fns(const key_type& key);
+                static std::shared_ptr<serializable> get_object(std::istream& is, const serializable_fn* const fns);
+			    static std::shared_ptr<serializable> deserialize(std::istream& is, const key_type& key);
+                static std::shared_ptr<serializable> deserialize(std::istream& is, const std::shared_ptr<key_type>& key);
+            };
         private:
             struct key_type_compare : public std::binary_function<const key_type, const key_type, bool> {
                 bool operator()(const key_type& left, const key_type& right) {

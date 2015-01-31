@@ -82,6 +82,9 @@
     <ClInclude Include="datastore.h" />
     <ClInclude Include="transport_file.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\scripts\create_messages.py" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
