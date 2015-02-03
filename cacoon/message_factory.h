@@ -3,7 +3,7 @@
 #define CACOON_COMMS_MESSAGE_FACTORY_H
 
 #include "serializable.h"
-#include "../cacoon_test/generated/messages_types_includes.generated.h"
+#include <meta/messages/generated/messages_types_includes.generated.h>
 #include "message.h"
 #include <unordered_map>
 #include <memory>

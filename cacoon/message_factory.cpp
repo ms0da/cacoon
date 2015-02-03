@@ -68,13 +68,15 @@ void message_factory::serialize(std::ostream& os, const serializable& obj) {
 bool message_factory::deserialize(std::istream& is, key_type* key, std::shared_ptr<serializable>* const obj) {
     const auto key_id = stream_utility::get_id(is);
     const auto key_id_ptr = key_id.get();
-    if(nullptr != key_id_ptr) {
+    bool deserialized = nullptr != key_id_ptr;
+    if(deserialized) {
         const auto fns = stream_utility::get_fns(key_id_ptr->m_key);
-        if(nullptr != fns) {
+        deserialized = nullptr != fns;
+        if(deserialized) {
             *obj = fns->deserialize(is);
             *key = key_type(key_id_ptr->m_key);
         }
     }
-    return key;
+    return deserialized;
 }
 
