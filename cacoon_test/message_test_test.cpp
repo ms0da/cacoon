@@ -1,6 +1,6 @@
 
 #include "../ext/catch/catch.hpp"
-#include "generated/test_message.generated.h"
+#include "meta/messages/generated/test_message.generated.h"
 #include "../cacoon//message_factory.h"
 #include <sstream>
 

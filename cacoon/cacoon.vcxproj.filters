@@ -40,6 +40,12 @@
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{f559020c-8f81-47ae-b3d9-63c4951363a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\comms\Generated Files">
+      <UniqueIdentifier>{e2075103-21df-4c8e-bf61-58a371f22f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\comms\Messages">
+      <UniqueIdentifier>{2dd92c1e-616a-429e-ab6f-dfdbcf670edc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="datastore.cpp">
@@ -65,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="message_factory.cpp">
       <Filter>Source Files\comms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\meta\messages\generated\message_factory.generated.cpp">
+      <Filter>Source Files\comms\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\meta\messages\generated\messages_types_implementation.generated.cpp">
+      <Filter>Source Files\comms\Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="engine.h">
       <Filter>Header Files\comms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\meta\messages\generated\messages_types_includes.generated.h">
+      <Filter>Source Files\comms\Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

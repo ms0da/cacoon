@@ -19,6 +19,15 @@
     <Filter Include="Generated Files">
       <UniqueIdentifier>{7d06696e-826e-465a-b616-a20a0ae00203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\comms\Messages">
+      <UniqueIdentifier>{2afa533f-230e-4eb9-90be-96fc33d0c418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\comms\Messages\Definitions">
+      <UniqueIdentifier>{3d4fa1a6-3ef2-48bb-8fc5-72299107a012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\comms\Messages\Generated">
+      <UniqueIdentifier>{a124ffcb-bc1c-4587-99a1-7e974b0e3543}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent_test.cpp">
@@ -33,12 +42,6 @@
     <ClCompile Include="datastore_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="generated\message_factory.generated.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="generated\messages_types_implementation.generated.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="message_factory_test.cpp">
       <Filter>Source Files\comms</Filter>
     </ClCompile>
@@ -48,18 +51,21 @@
     <ClCompile Include="comms_test.cpp">
       <Filter>Source Files\comms</Filter>
     </ClCompile>
+    <ClCompile Include="meta\messages\generated\message_factory.generated.cpp">
+      <Filter>Source Files\comms\Messages\Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="meta\messages\generated\messages_types_implementation.generated.cpp">
+      <Filter>Source Files\comms\Messages\Generated</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cacoon_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="generated\messages_types_includes.generated.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="messages_definitions\test_message.xml">
-      <Filter>Resource Files</Filter>
+    <Xml Include="meta\messages\definitions\test_message.xml">
+      <Filter>Source Files\comms\Messages\Definitions</Filter>
     </Xml>
   </ItemGroup>
 </Project>

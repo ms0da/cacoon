@@ -38,7 +38,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
+    <IncludePath>$(SolutionDir);$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -48,6 +52,13 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>python $(SolutionDir)scripts/create_messages.py $(SolutionDir)meta/messages/definitions $(SolutionDir)meta/messages/generated</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -64,6 +75,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\meta\messages\generated\messages_types_implementation.generated.cpp" />
+    <ClCompile Include="..\meta\messages\generated\message_factory.generated.cpp" />
     <ClCompile Include="message.cpp" />
     <ClCompile Include="message_factory.cpp" />
     <ClCompile Include="serializable.cpp" />
@@ -72,6 +85,7 @@
     <ClCompile Include="datastore.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\meta\messages\generated\messages_types_includes.generated.h" />
     <ClInclude Include="agent.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="message.h" />

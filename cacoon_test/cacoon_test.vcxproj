@@ -39,8 +39,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir);$(SolutionDir)/cacoon;$(IncludePath)</IncludePath>
+    <CustomBuildBeforeTargets>PreBuildEvent</CustomBuildBeforeTargets>
     <LibraryPath>$(OutDir);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)/cacoon;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)/cacoon;$(IncludePath)</IncludePath>
@@ -56,9 +57,11 @@
       <AdditionalDependencies>cacoon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)meta/messages/definitions $(ProjectDir)meta/messages/generated</Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>python $(SolutionDir)scripts/create_messages.py $(ProjectDir)messages_definitions $(ProjectDir)generated</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -82,17 +85,16 @@
   <ItemGroup>
     <ClCompile Include="agent_test.cpp" />
     <ClCompile Include="comms_test.cpp" />
-    <ClCompile Include="generated\messages_types_implementation.generated.cpp" />
-    <ClCompile Include="generated\message_factory.generated.cpp" />
     <ClCompile Include="message_factory_test.cpp" />
     <ClCompile Include="message_test_test.cpp" />
+    <ClCompile Include="meta\messages\generated\messages_types_implementation.generated.cpp" />
+    <ClCompile Include="meta\messages\generated\message_factory.generated.cpp" />
     <ClCompile Include="transport_test.cpp" />
     <ClCompile Include="datastore_test.cpp" />
     <ClCompile Include="test_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cacoon_test.h" />
-    <ClInclude Include="generated\messages_types_includes.generated.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cacoon\cacoon.vcxproj">
@@ -100,7 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="messages_definitions\test_message.xml" />
+    <Xml Include="meta\messages\definitions\test_message.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
