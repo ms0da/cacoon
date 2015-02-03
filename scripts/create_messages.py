@@ -109,6 +109,9 @@ class utils :
 			file = open(path, "w")
 			file.write(content)
 			file.close()
+		def delete(path) :
+			os.remove(path)
+
 		def write_header(outdir, xml) :
 			define = xml.get_name().upper() + "_GENERATED_H"
 
@@ -116,7 +119,7 @@ class utils :
 			content.add_line("#ifndef " + define)
 			content.add_line("#define " + define)
 			content.add_line(utils.const.generated_warning)
-			content.add_line("#include \"../../cacoon/message.h\"")
+			content.add_line("#include <cacoon/message.h>")
 			content.add_line("namespace cacoon {")
 			content.tab_inc()
 			content.add_line("namespace comms {")
@@ -257,6 +260,7 @@ class common_impl :
 	def __init_content(self) :
 		self.content = utils.file_content()
 		self.content.add_line(utils.const.generated_warning)
+		self.content.add_line("#include <serializable.h>")
 		self.content.add_line("#include \"" + common_header.name + utils.extension.get_header() + "\"")
 		self.content.add_line("using cacoon::comms::serializable;")
 
@@ -311,38 +315,37 @@ class message_factory :
 		self.types.append(xml)
 
 class messages_builder() :
-	def __init__(self, dir_in, dir_out) :
-		self.dir_in = dir_in
-		self.dir_out = dir_out
+	def __init__(self, msg_dir_in, msg_dir_out) :
+		self.msg_dir_in = msg_dir_in
+		self.msg_dir_out = msg_dir_out
 
 	def build(self) :
-		file_list = os.listdir(self.dir_in)
-		if not os.path.exists(self.dir_out) :
-			os.makedirs(self.dir_out)
-		common_h = common_header(self.dir_out)
-		common_cpp = common_impl(self.dir_out)
-		msg_factory = message_factory(self.dir_out)
+		file_list = os.listdir(self.msg_dir_in)
+		if not os.path.exists(self.msg_dir_out) :
+			os.makedirs(self.msg_dir_out)
+		common_h = common_header(self.msg_dir_out)
+		common_cpp = common_impl(self.msg_dir_out)
+		msg_factory = message_factory(self.msg_dir_out)
 
 		xml = None
 		for file in file_list :
 			if(".xml" in file) :  
 				utils.print.info("Processing " + file)
-				xml = xml_message(self.dir_in + file)
+				xml = xml_message(self.msg_dir_in + file)
 				xml.parse()
-				utils.file.write_header(self.dir_out, xml)
+				utils.file.write_header(self.msg_dir_out, xml)
 				common_h.add(xml)
 				common_cpp.add(xml)
 				msg_factory.add(xml)
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("in_directory", help="directory containing messages metadata (xml)")
-parser.add_argument("out_directory", help="directory to output files")
+parser.add_argument("msg_dir_in", help="input directory containing messages metadata")
+parser.add_argument("msg_dir_out", help="output directory for generated messages")
 args = parser.parse_args()
 
-if(args.in_directory) :
-	#dir = "../libs/comms/messaging/messages_definitions/"
-	builder = messages_builder(args.in_directory + "/", args.out_directory + "/")
+if (args.msg_dir_in is not None) and (args.msg_dir_out is not None) :
+	builder = messages_builder(args.msg_dir_in + "/", args.msg_dir_out + "/")
 	builder.build()
 else :
 	parse.print_help()
