@@ -26,3 +26,5 @@
 # Debug
 Debug/
 */Debug/*
+
+*.generated.*
