@@ -1,0 +1,3 @@
+#ifndef BLANKLIB_HEADER_H
+#define BLANKLIB_HEADER_H
+#endif

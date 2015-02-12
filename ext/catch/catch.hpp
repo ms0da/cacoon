@@ -6788,6 +6788,7 @@ namespace Catch {
             }
         private:
             SectionInfo const& m_other;
+            BySectionInfo& operator= (BySectionInfo& other) = delete;
         };
 
         typedef Node<TestCaseStats, SectionNode> TestCaseNode;

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LibsDir>$(SolutionDir)..\libs\</LibsDir>
+    <ScriptsDir>$(SolutionDir)..\scripts\</ScriptsDir>
+    <GeneratedDir>$(SolutionDir)..\bin\meta\generated\</GeneratedDir>
+    <ExtDir>$(SolutionDir)..\ext\</ExtDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\bin\$(Platform)\$(Configuration)\pdb\$(ProjectName)\</IntDir>
+    <IncludePath>$(GeneratedDir);$(LibsDir);$(ExtDir);$(IncludePath)</IncludePath>
+    <SourcePath>$IncludePath);$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="LibsDir">
+      <Value>$(LibsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ScriptsDir">
+      <Value>$(ScriptsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GeneratedDir">
+      <Value>$(GeneratedDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ExtDir">
+      <Value>$(ExtDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

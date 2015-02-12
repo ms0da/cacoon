@@ -119,7 +119,7 @@ class utils :
 			content.add_line("#ifndef " + define)
 			content.add_line("#define " + define)
 			content.add_line(utils.const.generated_warning)
-			content.add_line("#include <cacoon/message.h>")
+			content.add_line("#include <cacoon/include/message.h>")
 			content.add_line("namespace cacoon {")
 			content.tab_inc()
 			content.add_line("namespace comms {")
@@ -260,7 +260,7 @@ class common_impl :
 	def __init_content(self) :
 		self.content = utils.file_content()
 		self.content.add_line(utils.const.generated_warning)
-		self.content.add_line("#include <serializable.h>")
+		self.content.add_line("#include <cacoon/include/serializable.h>")
 		self.content.add_line("#include \"" + common_header.name + utils.extension.get_header() + "\"")
 		self.content.add_line("using cacoon::comms::serializable;")
 
@@ -288,7 +288,7 @@ class message_factory :
 		self.path = dir + self.name + utils.extension.get_source()
 		self.types = list()
 		self.buffer = utils.file_content()
-		self.buffer.add_line("#include \"message_factory.h\"")
+		self.buffer.add_line("#include <cacoon/include/message_factory.h>")
 		self.buffer.add_line("using cacoon::comms::types;")
 		self.buffer.add_line("using cacoon::comms::serializable;")
 		self.buffer.add_line("using cacoon::comms::message_factory;")
@@ -314,22 +314,25 @@ class message_factory :
 	def add(self, xml) :
 		self.types.append(xml)
 
-class messages_builder() :
-	def __init__(self, msg_dir_in, msg_dir_out) :
+class messages_builder():
+	def __init__(self, msg_dir_in, msg_dir_out):
 		self.msg_dir_in = msg_dir_in
 		self.msg_dir_out = msg_dir_out
 
-	def build(self) :
+	def build(self):
+		print("Messages definitions from: " + self.msg_dir_in)
+		print("Messages generated to: " + self.msg_dir_out)
+
 		file_list = os.listdir(self.msg_dir_in)
-		if not os.path.exists(self.msg_dir_out) :
+		if not os.path.exists(self.msg_dir_out):
 			os.makedirs(self.msg_dir_out)
 		common_h = common_header(self.msg_dir_out)
 		common_cpp = common_impl(self.msg_dir_out)
 		msg_factory = message_factory(self.msg_dir_out)
 
 		xml = None
-		for file in file_list :
-			if(".xml" in file) :  
+		for file in file_list:
+			if(".xml" in file):  
 				utils.print.info("Processing " + file)
 				xml = xml_message(self.msg_dir_in + file)
 				xml.parse()
@@ -344,8 +347,10 @@ parser.add_argument("msg_dir_in", help="input directory containing messages meta
 parser.add_argument("msg_dir_out", help="output directory for generated messages")
 args = parser.parse_args()
 
-if (args.msg_dir_in is not None) and (args.msg_dir_out is not None) :
+print("========== create_messages.py ==========")
+if (args.msg_dir_in is not None) and (args.msg_dir_out is not None):
 	builder = messages_builder(args.msg_dir_in + "/", args.msg_dir_out + "/")
 	builder.build()
-else :
+else:
 	parse.print_help()
+print("========================================")
