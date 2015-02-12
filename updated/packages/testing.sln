@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cacoon", "..\libs\cacoon\cacoon.vcxproj", "{F679DEC6-D304-4F7B-A9B1-7F42313F8896}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cacoon_test", "..\tests\cacoon_test\cacoon_test.vcxproj", "{D9EB288B-0C7D-4079-97C6-EE061B9397B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F679DEC6-D304-4F7B-A9B1-7F42313F8896}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F679DEC6-D304-4F7B-A9B1-7F42313F8896}.Debug|Win32.Build.0 = Debug|Win32
+		{F679DEC6-D304-4F7B-A9B1-7F42313F8896}.Release|Win32.ActiveCfg = Release|Win32
+		{F679DEC6-D304-4F7B-A9B1-7F42313F8896}.Release|Win32.Build.0 = Release|Win32
+		{D9EB288B-0C7D-4079-97C6-EE061B9397B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D9EB288B-0C7D-4079-97C6-EE061B9397B5}.Debug|Win32.Build.0 = Debug|Win32
+		{D9EB288B-0C7D-4079-97C6-EE061B9397B5}.Release|Win32.ActiveCfg = Release|Win32
+		{D9EB288B-0C7D-4079-97C6-EE061B9397B5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
