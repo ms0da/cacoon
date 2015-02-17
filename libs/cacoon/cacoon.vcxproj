@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\bin\meta\generated\messages\messages_types_includes.generated.h" />
     <ClInclude Include="include\agent.h" />
     <ClInclude Include="include\datastore.h" />
     <ClInclude Include="include\engine.h" />
@@ -22,6 +23,8 @@
     <ClInclude Include="include\transport_file.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\bin\meta\generated\messages\messages_types_implementation.generated.cpp" />
+    <ClCompile Include="..\..\bin\meta\generated\messages\message_factory.generated.cpp" />
     <ClCompile Include="source\datastore.cpp" />
     <ClCompile Include="source\message.cpp" />
     <ClCompile Include="source\message_factory.cpp" />

@@ -30,10 +30,10 @@
     <ClCompile Include="source\transport_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bin\meta\generated\messages\message_factory.generated.cpp">
+    <ClCompile Include="..\..\bin\meta\generated\messages\messages_types_implementation.generated.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\bin\meta\generated\messages\messages_types_implementation.generated.cpp">
+    <ClCompile Include="..\..\bin\meta\generated\messages\message_factory.generated.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,10 +44,10 @@
     <ClInclude Include="include\test_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bin\meta\generated\messages\messages_types_includes.generated.h">
+    <ClInclude Include="..\..\bin\meta\generated\messages\test_message.generated.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\bin\meta\generated\messages\test_message.generated.h">
+    <ClInclude Include="..\..\bin\meta\generated\messages\messages_types_includes.generated.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
