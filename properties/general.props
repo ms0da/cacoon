@@ -11,7 +11,7 @@
     <OutDir>$(SolutionDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\bin\$(Platform)\$(Configuration)\pdb\$(ProjectName)\</IntDir>
     <IncludePath>$(GeneratedDir);$(LibsDir);$(ExtDir);$(IncludePath)</IncludePath>
-    <SourcePath>$IncludePath);$(SourcePath)</SourcePath>
+    <SourcePath>$(IncludePath);$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemGroup>
     <BuildMacro Include="LibsDir">
