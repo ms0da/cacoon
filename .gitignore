@@ -29,4 +29,5 @@ Debug/
 
 *.generated.*
 
-*.suo
+*.sdf
+*.opensdf
